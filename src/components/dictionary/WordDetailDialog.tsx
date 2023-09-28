@@ -37,13 +37,21 @@ export default function WordDetailDialog(props: PrivateProps) {
           <DialogTitle className="text-3xl">{DUMMY_WORD.word}</DialogTitle>
         </DialogHeader>
         <DialogDescription className="flex max-h-[600px] flex-col gap-4 overflow-y-scroll p-5 pr-0 pt-3">
-          <div className="text-xl">{DUMMY_WORD.wordDescription}</div>
+          <div className="mb-4 text-xl">{DUMMY_WORD.wordDescription}</div>
           <ReactPlayer
             width="100%"
             height="100%"
             url="https://qipedc.moet.gov.vn/videos/D0001N.mp4?autoplay=true"
             controls
           />
+          <div className="flex justify-end">
+            <Button
+              onClick={() => props._setIsOpen(false)}
+              className="dark:bg-neutral-800 dark:text-white dark:hover:bg-white dark:hover:text-black"
+            >
+              Đóng
+            </Button>
+          </div>
         </DialogDescription>
       </DialogContent>
     </Dialog>
