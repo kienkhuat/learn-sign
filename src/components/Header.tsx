@@ -2,6 +2,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
+import { BookOpen } from "lucide-react";
 
 export const Header = () => {
   const { data: sessionData } = useSession();
@@ -11,9 +12,10 @@ export const Header = () => {
       <div className="flex gap-16">
         <Link
           href="/"
-          className="cursor-pointer text-2xl font-bold hover:text-gray-100"
+          className="flex cursor-pointer items-end gap-2 text-xl font-bold hover:text-gray-100"
         >
-          Learn Sign
+          <BookOpen />
+          <div>Learn Sign</div>
         </Link>
         <div className="flex items-center gap-10 text-xl">
           <Link
