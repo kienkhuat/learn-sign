@@ -23,6 +23,23 @@ export const dictionaryRouter = createTRPCRouter({
       });
     }),
 
+  searchWords: publicProcedure
+    .input(
+      z.object({
+        searchInput: z.string(),
+      }),
+    )
+    .query(({ input: { searchInput }, ctx }) => {
+      return ctx.db.word.findMany({
+        where: {
+          word: {
+            contains: searchInput,
+            mode: "insensitive",
+          },
+        },
+      });
+    }),
+
   createNewWord: protectedProcedure
     .input(
       z.object({

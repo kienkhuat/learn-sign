@@ -10,8 +10,8 @@ import WordToolbar from "~/components/dictionary/WordToolbar";
 import { api } from "~/utils/api";
 
 export default function Home() {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const [darkMode, setDarkmode] = useState(true);
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     if (darkMode) {
@@ -27,6 +27,10 @@ export default function Home() {
     refetch,
   } = api.dictionary.getAllWord.useQuery();
 
+  const { data: searchedWordList } = api.dictionary.searchWords.useQuery({
+    searchInput: searchInput,
+  });
+
   return (
     <>
       <Head>
@@ -40,9 +44,12 @@ export default function Home() {
           <div className="flex h-[calc(100%-64px)]">
             {/* <DictionarySideMenu /> */}
             <div className="w-full">
-              <WordToolbar _refetch={refetch} />
+              <WordToolbar
+                _refetch={refetch}
+                _setSearchInput={setSearchInput}
+              />
               <WordList
-                wordList={wordList}
+                wordList={searchInput ? searchedWordList : wordList}
                 isLoading={isLoading}
                 _refetch={refetch}
               />

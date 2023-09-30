@@ -14,6 +14,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import ReactPlayer from "react-player";
 import { api } from "~/utils/api";
+import { useSession } from "next-auth/react";
 
 type PrivateProps = {
   isOpen: boolean;
@@ -26,6 +27,8 @@ type PrivateProps = {
 };
 
 export default function WordDetailDialog(props: PrivateProps) {
+  const { data: sessionData } = useSession();
+
   const { data: wordData, refetch: refetchWord } =
     api.dictionary.findWord.useQuery({
       id: props.selectedWord,
@@ -62,14 +65,18 @@ export default function WordDetailDialog(props: PrivateProps) {
             />
           </div>
           <div className="flex justify-between px-2">
-            <div>
-              <Button
-                onClick={() => handleDeleteWord()}
-                className="mr-2 dark:bg-red-800 dark:text-white"
-              >
-                {isLoading ? <Loader2 className="animate-spin" /> : "Xóa"}
-              </Button>
-            </div>
+            {sessionData?.user.role === "admin" ? (
+              <div>
+                <Button
+                  onClick={() => handleDeleteWord()}
+                  className="mr-2 dark:bg-red-800 dark:text-white"
+                >
+                  {isLoading ? <Loader2 className="animate-spin" /> : "Xóa"}
+                </Button>
+              </div>
+            ) : (
+              <div></div>
+            )}
             <Button
               onClick={() => props._setIsOpen(false)}
               className="dark:bg-neutral-800 dark:text-white dark:hover:bg-white dark:hover:text-black"
