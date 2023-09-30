@@ -1,269 +1,39 @@
 import { useState } from "react";
 import WordDetailDialog from "./WordDetailDialog";
+import { api } from "~/utils/api";
 
-const PLACEHOLDER_WORD = [
-  {
-    id: 1,
-    word: "Địa chỉ (Miền Bắc)",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ (Miền Trung)",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ (Miền Nam)",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-  {
-    id: 1,
-    word: "Địa chỉ",
-    thumbnail: "https://qipedc.moet.gov.vn/thumbs/D0001B.png",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  },
-];
+type PrivateProps = {
+  wordList:
+    | {
+        id: string;
+        word: string;
+        videoLink: string;
+        thumbnailLink: string;
+        definition: string;
+      }[]
+    | undefined;
+  _refetch: Function;
+  isLoading: boolean;
+};
 
-export default function WordList() {
+export default function WordList(props: PrivateProps) {
   const [openWordDialog, setOpenWordDialog] = useState(false);
   const [selectedWord, setSelectedWord] = useState("");
 
-  const videosToRender = PLACEHOLDER_WORD.map((word, index) => {
+  const videosToRender = props.wordList?.map((word, index) => {
     return (
       <div
         key={index}
-        className="flex h-[220px] cursor-pointer flex-col items-center justify-center rounded-lg dark:bg-neutral-900"
-        onClick={() => setOpenWordDialog(true)}
+        className="flex h-[220px] cursor-pointer flex-col items-center justify-center rounded-lg shadow-md shadow-neutral-950 dark:bg-neutral-900"
+        onClick={() => {
+          setOpenWordDialog(true);
+          setSelectedWord(word.id);
+        }}
       >
         <div className="h-full w-full overflow-hidden rounded-t-lg">
           <img
             className="h-full w-full rounded-t-lg object-cover transition-all duration-500 hover:scale-110"
-            src={`${word.thumbnail}`}
+            src={`${word.thumbnailLink}`}
           />
         </div>
         <div className="my-2 text-xl dark:text-neutral-300">{word.word}</div>
@@ -278,6 +48,8 @@ export default function WordList() {
       <WordDetailDialog
         isOpen={openWordDialog}
         _setIsOpen={setOpenWordDialog}
+        selectedWord={selectedWord}
+        _refetch={props._refetch}
       />
     </>
   );

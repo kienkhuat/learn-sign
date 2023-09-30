@@ -13,21 +13,44 @@ import { ThemeProvider } from "next-themes";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { api } from "~/utils/api";
 type PrivateProps = {
   isOpen: boolean;
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  _refetch: Function;
 };
 export default function AddWordDialog(props: PrivateProps) {
   const [word, setWord] = useState("");
   const [videoLink, setVideoLink] = useState("");
+  const [thumbnailLink, setThumbnailLink] = useState("");
   const [definition, setDefinition] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleAddWord = () => {
+  const { mutateAsync: apiCreateWord } =
+    api.dictionary.createNewWord.useMutation({
+      onSuccess(data, variables, context) {
+        return props._refetch();
+      },
+    });
+
+  const handleCreateWord = async () => {
     setIsLoading(true);
-    console.log({ word, videoLink, definition });
-    // props._setIsOpen(false);
-    // setIsLoading(false);
+    const createWordData = {
+      word,
+      videoLink,
+      thumbnailLink,
+      definition,
+    };
+    console.log(createWordData);
+    await apiCreateWord({
+      ...createWordData,
+    });
+    setIsLoading(false);
+    props._setIsOpen(false);
+    setVideoLink("");
+    setWord("");
+    setThumbnailLink("");
+    setDefinition("");
   };
 
   return (
@@ -56,6 +79,14 @@ export default function AddWordDialog(props: PrivateProps) {
               />
             </div>
             <div className="grid w-[95%]  items-center gap-2.5">
+              <Label htmlFor="text">Link Thumbnail</Label>
+              <Input
+                onChange={(e) => setThumbnailLink(e.currentTarget.value)}
+                type="text"
+                placeholder="Nhập link thumbnail..."
+              />
+            </div>
+            <div className="grid w-[95%]  items-center gap-2.5">
               <Label htmlFor="text">Định nghĩa</Label>
               <Textarea
                 onChange={(e) => setDefinition(e.currentTarget.value)}
@@ -71,7 +102,7 @@ export default function AddWordDialog(props: PrivateProps) {
               >
                 Đóng
               </Button>
-              <Button onClick={() => handleAddWord()}>
+              <Button onClick={() => handleCreateWord()}>
                 {isLoading ? <Loader2 className="animate-spin" /> : "Thêm"}
               </Button>
             </div>

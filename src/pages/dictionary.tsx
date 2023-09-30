@@ -21,6 +21,12 @@ export default function Home() {
     }
   }, [darkMode]);
 
+  const {
+    data: wordList,
+    isLoading,
+    refetch,
+  } = api.dictionary.getAllWord.useQuery();
+
   return (
     <>
       <Head>
@@ -34,8 +40,12 @@ export default function Home() {
           <div className="flex h-[calc(100%-64px)]">
             {/* <DictionarySideMenu /> */}
             <div className="w-full">
-              <WordToolbar />
-              <WordList />
+              <WordToolbar _refetch={refetch} />
+              <WordList
+                wordList={wordList}
+                isLoading={isLoading}
+                _refetch={refetch}
+              />
             </div>
           </div>
         </div>

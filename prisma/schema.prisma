@@ -23,6 +23,14 @@ model Example {
     @@index([name])
 }
 
+model Word {
+    id            String @id @default(cuid())
+    word          String
+    videoLink     String
+    thumbnailLink String
+    definition    String @db.Text
+}
+
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())

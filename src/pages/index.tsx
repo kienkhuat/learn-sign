@@ -6,7 +6,7 @@ import { Header } from "~/components/Header";
 import { api } from "~/utils/api";
 
 export default function Home() {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const [darkMode, setDarkmode] = useState(true);
 
   useEffect(() => {

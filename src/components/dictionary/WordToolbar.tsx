@@ -4,7 +4,11 @@ import { PlusIcon } from "lucide-react";
 import { Input } from "../ui/input";
 import AddWordDialog from "./AddWordDialog";
 
-export default function WordToolbar() {
+type PrivateProps = {
+  _refetch: Function;
+};
+
+export default function WordToolbar(props: PrivateProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -23,7 +27,11 @@ export default function WordToolbar() {
       >
         <PlusIcon />
       </Button>
-      <AddWordDialog isOpen={open} _setIsOpen={setOpen} />
+      <AddWordDialog
+        isOpen={open}
+        _setIsOpen={setOpen}
+        _refetch={props._refetch}
+      />
     </div>
   );
 }
