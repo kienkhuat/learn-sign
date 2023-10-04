@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Header } from "~/components/Header";
-import ClassDashboard from "~/components/class/ClassList";
+import ClassDashboard from "~/components/class/classList/ClassListView";
 import ClassSideMenu from "~/components/class/ClassSideMenu";
 
 import { api } from "~/utils/api";

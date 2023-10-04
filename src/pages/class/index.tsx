@@ -4,10 +4,12 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Header } from "~/components/Header";
-import ClassList from "~/components/class/ClassList";
+import ClassList from "~/components/class/classList/ClassListView";
 import ClassSideMenu from "~/components/class/ClassSideMenu";
 
 import { api } from "~/utils/api";
+import StudentClassList from "~/components/class/classList/StudentClassList";
+import TeacherClassList from "~/components/class/classList/TeacherClassList";
 
 export default function Home() {
   const [darkMode, setDarkmode] = useState(true);
@@ -34,7 +36,7 @@ export default function Home() {
           <Header />
           <div className="flex h-[calc(100%-64px)] w-full">
             <ClassSideMenu pathname={router.pathname} />
-            <ClassList />
+            <TeacherClassList />
           </div>
         </div>
       </main>
