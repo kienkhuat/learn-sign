@@ -20,7 +20,7 @@ type PrivateProps = {
   isOpen: boolean;
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   selectedWord: string;
-  _refetch: Function;
+  _refetch: (...args: any[]) => any;
   // word: string;
   // wordDescription: string;
   // videoLink: string;

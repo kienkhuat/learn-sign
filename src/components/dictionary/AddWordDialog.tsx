@@ -17,7 +17,7 @@ import { api } from "~/utils/api";
 type PrivateProps = {
   isOpen: boolean;
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  _refetch: Function;
+  _refetch: (...args: any[]) => any;
 };
 export default function AddWordDialog(props: PrivateProps) {
   const [word, setWord] = useState("");

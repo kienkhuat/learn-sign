@@ -8,8 +8,8 @@ import { api } from "~/utils/api";
 import { useDebounce } from "use-debounce";
 
 type PrivateProps = {
-  _refetch: Function;
-  _setSearchInput: Function;
+  _refetch: (...args: any[]) => any;
+  _setSearchInput: (...args: any[]) => any;
 };
 
 export default function WordToolbar(props: PrivateProps) {
@@ -54,7 +54,7 @@ export default function WordToolbar(props: PrivateProps) {
       <AddWordDialog
         isOpen={open}
         _setIsOpen={setOpen}
-        _refetch={props._refetch}
+        _refetch={props._refetch()}
       />
     </div>
   );
