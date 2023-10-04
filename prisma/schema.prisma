@@ -31,7 +31,29 @@ model Word {
     definition    String @db.Text
 }
 
+model Classroom {
+    id        String   @id @default(cuid())
+    name      String
+    createdAt DateTime @default(now())
+    students  User[]   @relation("StudentClassroom")
+    teacherId String
+    teacher   User     @relation("TeacherClassroom", fields: [teacherId], references: [id], onDelete: Cascade)
+}
+
 // Necessary for Next auth
+model User {
+    id                String      @id @default(cuid())
+    name              String?
+    email             String?     @unique
+    emailVerified     DateTime?
+    image             String?
+    role              String      @default("student")
+    accounts          Account[]
+    sessions          Session[]
+    classrooms        Classroom[] @relation("StudentClassroom")
+    createdClassrooms Classroom[] @relation("TeacherClassroom")
+}
+
 model Account {
     id                String  @id @default(cuid())
     userId            String
@@ -56,17 +78,6 @@ model Session {
     userId       String
     expires      DateTime
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    role          String?
-    accounts      Account[]
-    sessions      Session[]
 }
 
 model VerificationToken {
