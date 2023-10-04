@@ -1,14 +1,11 @@
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
-import { BookOpen, DoorOpenIcon, LogOutIcon, SettingsIcon } from "lucide-react";
+import { BookOpen, LogOutIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
@@ -44,7 +41,7 @@ export const Header = () => {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar className="hover:cursor-pointer">
-              <AvatarImage src={sessionData?.user.image || ""} />
+              <AvatarImage src={sessionData?.user.image ?? ""} />
               <AvatarFallback>
                 {sessionData?.user.name?.slice(0, 1)}
               </AvatarFallback>

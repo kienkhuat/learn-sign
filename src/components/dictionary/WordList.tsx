@@ -12,7 +12,7 @@ type PrivateProps = {
         definition: string;
       }[]
     | undefined;
-  _refetch: Function;
+  _refetch: (...args: any[]) => any;
   isLoading: boolean;
 };
 

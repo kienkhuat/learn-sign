@@ -127,6 +127,7 @@ export default function ClassList() {
     const classToRender = classList?.map((classData, index) => {
       return (
         <Link
+          key={index}
           href={`/class/${classData.id}`}
           className="flex h-[200px] w-[100%] cursor-pointer flex-col gap-2 rounded-lg shadow-md shadow-neutral-950 dark:bg-neutral-900 dark:text-neutral-300"
         >
