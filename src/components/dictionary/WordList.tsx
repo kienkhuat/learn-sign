@@ -42,7 +42,7 @@ export default function WordList(props: PrivateProps) {
   });
   return (
     <>
-      <div className="grid max-h-[calc(100%-72px)] gap-5 overflow-x-hidden overflow-y-scroll px-4 pb-4 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+      <div className="grid max-h-[calc(100%-80px)] gap-5 overflow-x-hidden overflow-y-scroll px-4 pb-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 2xl:pr-0">
         {videosToRender}
       </div>
       <WordDetailDialog

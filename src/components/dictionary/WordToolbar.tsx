@@ -30,7 +30,7 @@ export default function WordToolbar(props: PrivateProps) {
   };
 
   return (
-    <div className="flex items-center justify-between px-4 pb-5 pt-3">
+    <div className="flex items-center justify-between px-4 pb-5 pt-5">
       <div>
         <Input
           className="min-w-[320px] dark:bg-neutral-950 dark:text-gray-300"

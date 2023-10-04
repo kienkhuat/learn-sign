@@ -39,11 +39,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="h-full">
-        <div className="h-full dark:bg-neutral-800">
+        <div className="h-full dark:bg-neutral-900">
           <Header />
-          <div className="flex h-[calc(100%-64px)]">
+          <div className="flex h-[calc(100%-64px)] justify-center">
             {/* <DictionarySideMenu /> */}
-            <div className="w-full">
+            <div className="w-[100%] dark:bg-neutral-800 xl:w-[90%] 2xl:w-[80%]">
               <WordToolbar
                 _refetch={refetch}
                 _setSearchInput={setSearchInput}
