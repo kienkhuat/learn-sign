@@ -49,7 +49,7 @@ export default function WordList(props: PrivateProps) {
         isOpen={openWordDialog}
         _setIsOpen={setOpenWordDialog}
         selectedWord={selectedWord}
-        _refetch={props._refetch()}
+        _refetch={props._refetch}
       />
     </>
   );

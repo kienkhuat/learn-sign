@@ -54,7 +54,7 @@ export default function WordToolbar(props: PrivateProps) {
       <AddWordDialog
         isOpen={open}
         _setIsOpen={setOpen}
-        _refetch={props._refetch()}
+        _refetch={props._refetch}
       />
     </div>
   );

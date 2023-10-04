@@ -21,9 +21,6 @@ type PrivateProps = {
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   selectedWord: string;
   _refetch: (...args: any[]) => any;
-  // word: string;
-  // wordDescription: string;
-  // videoLink: string;
 };
 
 export default function WordDetailDialog(props: PrivateProps) {
