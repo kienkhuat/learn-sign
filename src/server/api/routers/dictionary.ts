@@ -50,7 +50,6 @@ export const dictionaryRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      console.log(input);
       return ctx.db.word.create({ data: { ...input } });
     }),
 
