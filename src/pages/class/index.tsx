@@ -1,19 +1,16 @@
-import { BookOpenIcon } from "lucide-react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Header } from "~/components/Header";
-import ClassList from "~/components/class/classList/ClassListView";
 import ClassSideMenu from "~/components/class/ClassSideMenu";
-
-import { api } from "~/utils/api";
 import StudentClassList from "~/components/class/classList/StudentClassList";
 import TeacherClassList from "~/components/class/classList/TeacherClassList";
 
 export default function Home() {
   const [darkMode, setDarkmode] = useState(true);
 
+  const { data: sessionData } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -23,6 +20,17 @@ export default function Home() {
       document.body.classList.remove("dark");
     }
   }, [darkMode]);
+
+  const renderRoleClassList = () => {
+    switch (sessionData?.user.role) {
+      case "teacher":
+        return <TeacherClassList />;
+      case "student":
+        return <StudentClassList />;
+      case "admin":
+        return <TeacherClassList />;
+    }
+  };
 
   return (
     <>
@@ -34,10 +42,14 @@ export default function Home() {
       <main className="h-full">
         <div className="h-full dark:bg-neutral-800">
           <Header />
-          <div className="flex h-[calc(100%-64px)] w-full">
-            <ClassSideMenu pathname={router.pathname} />
-            <TeacherClassList />
-          </div>
+          {sessionData ? (
+            <div className="flex h-[calc(100%-64px)] w-full">
+              <ClassSideMenu pathname={router.pathname} />
+              {renderRoleClassList()}
+            </div>
+          ) : (
+            <div>Need to login</div>
+          )}
         </div>
       </main>
     </>

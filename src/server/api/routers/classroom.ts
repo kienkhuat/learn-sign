@@ -14,6 +14,7 @@ export const classroomRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         teacherId: z.string(),
+        coverImage: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -21,11 +22,11 @@ export const classroomRouter = createTRPCRouter({
         db: ctx.db,
         input: { id: input.teacherId },
       });
-      if (foundUser?.role === "teacher") {
+      if (foundUser?.role === "teacher" || foundUser?.role === "admin") {
         return ctx.db.classroom.create({ data: { ...input } });
       } else {
         console.log("Create Classroom Error");
-        console.log(input);
+        console.log({ input, foundUser });
       }
     }),
 });

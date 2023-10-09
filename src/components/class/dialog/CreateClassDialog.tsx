@@ -11,32 +11,42 @@ import {
 import { Label } from "@radix-ui/react-label";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
+import { useSession } from "next-auth/react";
+import { base64Images } from "~/assets/base64Images";
 
 type PrivateProps = {
   isOpen: boolean;
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  // _refetch: (...args: any[]) => any;
+  _refetch: (...args: any[]) => any;
 };
 
 export default function CreateClassDialog(props: PrivateProps) {
   const [className, setClassName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // const { mutateAsync: apiCreateWord } =
-  //   api.dictionary.createNewWord.useMutation({
-  //     onSuccess(data, variables, context) {
-  //       return props._refetch();
-  //     },
-  //   });
+
+  const { data: sessionData } = useSession();
+
+  const { mutateAsync: apiCreateClassroom } =
+    api.classroom.createClassroom.useMutation({
+      // onSuccess(data, variables, context) {
+      //   return props._refetch();
+      // },
+    });
 
   const handleCreateClass = async () => {
+    if (!sessionData) return false;
     setIsLoading(true);
     const createClassData = {
-      className,
+      name: className,
+      teacherId: sessionData.user.id,
+      //TODO: Store image somewhere else and not base64
+      coverImage:
+        base64Images[Math.floor(Math.random() * base64Images.length)] || "",
     };
     console.log(createClassData);
-    // await apiCreateWord({
-    //   ...createWordData,
-    // });
+    await apiCreateClassroom({
+      ...createClassData,
+    });
     setIsLoading(false);
     props._setIsOpen(false);
   };

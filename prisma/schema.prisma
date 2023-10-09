@@ -32,12 +32,13 @@ model Word {
 }
 
 model Classroom {
-    id        String   @id @default(cuid())
-    name      String
-    createdAt DateTime @default(now())
-    students  User[]   @relation("StudentClassroom")
-    teacherId String
-    teacher   User     @relation("TeacherClassroom", fields: [teacherId], references: [id], onDelete: Cascade)
+    id         String   @id @default(cuid())
+    name       String
+    createdAt  DateTime @default(now())
+    students   User[]   @relation("StudentClassroom")
+    teacherId  String
+    coverImage String
+    teacher    User     @relation("TeacherClassroom", fields: [teacherId], references: [id], onDelete: Cascade)
 }
 
 // Necessary for Next auth
