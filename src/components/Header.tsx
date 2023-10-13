@@ -41,7 +41,10 @@ export const Header = () => {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar className="hover:cursor-pointer">
-              <AvatarImage src={sessionData?.user.image ?? ""} />
+              <AvatarImage
+                referrerPolicy="no-referrer"
+                src={sessionData?.user.image ?? ""}
+              />
               <AvatarFallback>
                 {sessionData?.user.name?.slice(0, 1)}
               </AvatarFallback>
