@@ -17,14 +17,10 @@ export default function Home() {
   const [darkMode, setDarkmode] = useState(true);
   const router = useRouter();
 
+  const { data: sessionData } = useSession();
+
   const searchParams = useSearchParams();
   const tabParams = searchParams.get("tab");
-
-  useEffect(() => {
-    if (!tabParams && router.isReady) {
-      router.push(`/class/${router.query.classId}?tab=documents`);
-    }
-  }, [tabParams, router.isReady]);
 
   const {
     data: classroomData,
@@ -33,6 +29,25 @@ export default function Home() {
   } = api.classroom.findClassroom.useQuery({
     classId: router.isReady ? (router.query.classId as string) : "",
   });
+
+  useEffect(() => {
+    if (!classroomData || !sessionData) return;
+    const studentInClassroom = classroomData.students.find(
+      (student) => student.id === sessionData.user.id,
+    );
+    if (
+      !studentInClassroom &&
+      classroomData.teacherId !== sessionData.user.id
+    ) {
+      router.push("/"); //Todo: redirect to request to join
+    }
+  }, [classroomData, sessionData]);
+
+  useEffect(() => {
+    if (!tabParams && router.isReady) {
+      router.push(`/class/${router.query.classId}?tab=documents`);
+    }
+  }, [tabParams, router.isReady]);
 
   useEffect(() => {
     if (darkMode) {
