@@ -44,7 +44,10 @@ export default function ClassroomStudentList(props: PrivateProps) {
 
   const renderStudentList = props.classroomData.students.map((student) => {
     return (
-      <div className="rounded-lg p-4 shadow-sm dark:bg-neutral-900 dark:text-neutral-300 dark:shadow-neutral-950">
+      <div
+        key={student.id}
+        className="rounded-lg p-4 shadow-sm dark:bg-neutral-900 dark:text-neutral-300 dark:shadow-neutral-950"
+      >
         <div className="mb-4 flex items-center gap-4">
           <Avatar className="h-[48px] w-[48px] hover:cursor-pointer">
             <AvatarImage
