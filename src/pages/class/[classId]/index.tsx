@@ -6,7 +6,10 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Header } from "~/components/Header";
 import ClassDetailSideMenu from "~/components/class/ClassDetailSideMenu";
-import StudentList from "~/components/class/student/StudentList";
+import StudentList from "~/components/class/list/classroom/ClassroomStudentList";
+import ClassroomAssignmentScreen from "~/components/class/screen/classroom/ClassroomAssignmentScreen";
+import ClassroomDocumentScreen from "~/components/class/screen/classroom/ClassroomDocumentScreen";
+import ClassroomStudentListScreen from "~/components/class/screen/classroom/ClassroomStudentListScreen";
 
 import { api } from "~/utils/api";
 
@@ -18,10 +21,10 @@ export default function Home() {
   const tabParams = searchParams.get("tab");
 
   useEffect(() => {
-    if (!tabParams) {
+    if (!tabParams && router.isReady) {
       router.push(`/class/${router.query.classId}?tab=documents`);
     }
-  }, [tabParams]);
+  }, [tabParams, router.isReady]);
 
   const {
     data: classroomData,
@@ -39,6 +42,32 @@ export default function Home() {
     }
   }, [darkMode]);
 
+  const renderTabScreen = () => {
+    switch (tabParams) {
+      case "documents":
+        return (
+          <ClassroomDocumentScreen
+            _refetch={refetch}
+            classroomData={classroomData!}
+          />
+        );
+      case "students":
+        return (
+          <ClassroomStudentListScreen
+            _refetch={refetch}
+            classroomData={classroomData!}
+          />
+        );
+      case "assignments":
+        return (
+          <ClassroomAssignmentScreen
+            _refetch={refetch}
+            classroomData={classroomData!}
+          />
+        );
+    }
+  };
+
   return (
     <>
       <Head>
@@ -49,19 +78,7 @@ export default function Home() {
       <main className="h-full">
         <div className="h-full dark:bg-neutral-800">
           <Header />
-          {classroomData ? (
-            <div className="flex h-[calc(100%-64px)] w-full">
-              <ClassDetailSideMenu
-                classroomData={classroomData!}
-                pathname={router.pathname}
-              />
-              <StudentList classroomData={classroomData} _refetch={refetch} />
-            </div>
-          ) : (
-            <div>
-              <Loader2Icon className="animate-spin" />
-            </div>
-          )}
+          {renderTabScreen()}
         </div>
       </main>
     </>

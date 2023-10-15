@@ -5,8 +5,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Header } from "~/components/Header";
 import ClassSideMenu from "~/components/class/ClassSideMenu";
-import StudentClassList from "~/components/class/classList/StudentClassList";
-import TeacherClassList from "~/components/class/classList/TeacherClassList";
+import StudentClassList from "~/components/class/list/StudentClassList";
+import TeacherClassList from "~/components/class/list/TeacherClassList";
+import ClassDashboardScreen from "~/components/class/screen/ClassDashboardScreen";
+import ClassListScreen from "~/components/class/screen/ClassListScreen";
+import ClassStudentScreen from "~/components/class/screen/ClassStudentScreen";
 
 export default function Home() {
   const [darkMode, setDarkmode] = useState(true);
@@ -31,14 +34,16 @@ export default function Home() {
     }
   }, [darkMode]);
 
-  const renderRoleClassList = () => {
-    switch (sessionData?.user.role) {
-      case "teacher":
-        return <TeacherClassList />;
-      case "student":
-        return <StudentClassList />;
-      case "admin":
-        return <TeacherClassList />;
+  const renderTabScreen = () => {
+    switch (tabParams) {
+      case "dashboard":
+        return <ClassDashboardScreen />;
+      case "classrooms":
+        return <ClassListScreen />;
+      case "students":
+        return <ClassStudentScreen />;
+      case "chat":
+        return <ClassListScreen />;
     }
   };
 
@@ -52,14 +57,7 @@ export default function Home() {
       <main className="h-full">
         <div className="h-full dark:bg-neutral-800">
           <Header />
-          {sessionData ? (
-            <div className="flex h-[calc(100%-64px)] w-full">
-              <ClassSideMenu />
-              {renderRoleClassList()}
-            </div>
-          ) : (
-            <div>Need to login</div>
-          )}
+          {renderTabScreen()}
         </div>
       </main>
     </>

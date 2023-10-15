@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import AddStudentDialog from "../dialog/AddStudentDialog";
+import AddStudentDialog from "../../dialog/AddStudentDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { api } from "~/utils/api";
 
@@ -32,7 +32,7 @@ type PrivateProps = {
   _refetch: (...args: any[]) => any;
 };
 
-export default function StudentList(props: PrivateProps) {
+export default function ClassroomStudentList(props: PrivateProps) {
   const [isAddStudentDialogOpen, setIsAddStudentDialogOpen] = useState(false);
 
   const { mutateAsync: removeStudent, isLoading } =

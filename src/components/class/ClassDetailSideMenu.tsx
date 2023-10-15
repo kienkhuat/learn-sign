@@ -15,7 +15,6 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 type PrivateProps = {
-  pathname: string;
   classroomData: {
     students: {
       id: string;
