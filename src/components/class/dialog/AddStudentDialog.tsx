@@ -19,11 +19,12 @@ type PrivateProps = {
   isOpen: boolean;
   classroomId: string;
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  // _refetch: (...args: any[]) => any;
+  _refetch: (...args: any[]) => any;
 };
 
 export default function AddStudentDialog(props: PrivateProps) {
   const [searchInput, setSearchInput] = useState("");
+  const [studentAdding, setStudentAdding] = useState([""]);
 
   const { data: sessionData } = useSession();
 
@@ -33,7 +34,7 @@ export default function AddStudentDialog(props: PrivateProps) {
   const { mutateAsync: addStudent, isLoading: isAddLoading } =
     api.classroom.addStudentToClass.useMutation({
       onSuccess(data, variables, context) {
-        console.log("Update Success");
+        return props._refetch();
       },
     });
 
@@ -41,7 +42,15 @@ export default function AddStudentDialog(props: PrivateProps) {
     return (
       <div
         key={student.id}
-        className="flex items-center justify-between rounded-lg p-4 dark:bg-neutral-950"
+        className="
+          flex 
+          items-center 
+          justify-between 
+          rounded-lg border-[1px] 
+          border-solid 
+        border-neutral-800 
+          p-4 
+        dark:bg-neutral-900"
       >
         <div className="flex gap-4">
           <Avatar className="h-[48px] w-[48px] hover:cursor-pointer">
@@ -58,11 +67,15 @@ export default function AddStudentDialog(props: PrivateProps) {
         </div>
         <div>
           <Button
-            disabled={isAddLoading}
+            disabled={
+              isAddLoading &&
+              (studentAdding.find((id) => id === student.id) ? true : false)
+            }
             size={"icon"}
             onClick={() => handleAddStudent(student.id)}
           >
-            {isAddLoading ? (
+            {isAddLoading &&
+            (studentAdding.find((id) => id === student.id) ? true : false) ? (
               <Loader2Icon className="animate-spin" />
             ) : (
               <PlusIcon />
@@ -73,12 +86,15 @@ export default function AddStudentDialog(props: PrivateProps) {
     );
   });
 
-  const handleAddStudent = (studentId: string) => {
-    console.log(studentId);
-    addStudent({
+  const handleAddStudent = async (studentId: string) => {
+    const AddedStudentQueue = [...studentAdding, studentId];
+    setStudentAdding(AddedStudentQueue);
+    await addStudent({
       studentId,
       classroomId: props.classroomId,
     });
+    const removedStudentQueue = studentAdding.filter((id) => id === studentId);
+    setStudentAdding(removedStudentQueue);
   };
 
   return (

@@ -4,6 +4,7 @@ import { Input } from "~/components/ui/input";
 import AddStudentDialog from "../../dialog/AddStudentDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { api } from "~/utils/api";
+import { Loader2Icon } from "lucide-react";
 
 type PrivateProps = {
   classroomData: {
@@ -34,6 +35,7 @@ type PrivateProps = {
 
 export default function ClassroomStudentList(props: PrivateProps) {
   const [isAddStudentDialogOpen, setIsAddStudentDialogOpen] = useState(false);
+  const [deletingStudent, setDeletingStudent] = useState([""]);
 
   const { mutateAsync: removeStudent, isLoading } =
     api.classroom.removeStudentFromClass.useMutation({
@@ -64,22 +66,37 @@ export default function ClassroomStudentList(props: PrivateProps) {
         <div className="flex justify-between">
           <div></div>
           <Button
+            disabled={
+              isLoading &&
+              (deletingStudent.find((id) => id === student.id) ? true : false)
+            }
             size={"sm"}
             className="dark:bg-red-800 dark:text-white hover:dark:bg-red-950"
             onClick={() => handleRemoveStudent(student.id)}
           >
-            Xóa
+            {isLoading &&
+            (deletingStudent.find((id) => id === student.id) ? true : false) ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              "Xóa"
+            )}
           </Button>
         </div>
       </div>
     );
   });
 
-  const handleRemoveStudent = (studentId: string) => {
-    removeStudent({
+  const handleRemoveStudent = async (studentId: string) => {
+    const AddedStudentQueue = [...deletingStudent, studentId];
+    setDeletingStudent(AddedStudentQueue);
+    await removeStudent({
       classroomId: props.classroomData.id,
       studentId: studentId,
     });
+    const removedStudentQueue = deletingStudent.filter(
+      (id) => id === studentId,
+    );
+    setDeletingStudent(removedStudentQueue);
   };
 
   return (
@@ -108,6 +125,7 @@ export default function ClassroomStudentList(props: PrivateProps) {
         classroomId={props.classroomData.id}
         isOpen={isAddStudentDialogOpen}
         _setIsOpen={setIsAddStudentDialogOpen}
+        _refetch={props._refetch}
       />
     </>
   );
