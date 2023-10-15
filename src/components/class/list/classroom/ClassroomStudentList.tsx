@@ -122,10 +122,10 @@ export default function ClassroomStudentList(props: PrivateProps) {
         </div>
       </div>
       <AddStudentDialog
-        classroomId={props.classroomData.id}
         isOpen={isAddStudentDialogOpen}
         _setIsOpen={setIsAddStudentDialogOpen}
         _refetch={props._refetch}
+        classroomData={props.classroomData}
       />
     </>
   );

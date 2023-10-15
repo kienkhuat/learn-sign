@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Loader2, Loader2Icon, PlusIcon } from "lucide-react";
+import {
+  Loader2,
+  Loader2Icon,
+  PlusIcon,
+  UserCheckIcon,
+  UserPlusIcon,
+} from "lucide-react";
 import { api } from "~/utils/api";
 import {
   Dialog,
@@ -17,9 +23,31 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 
 type PrivateProps = {
   isOpen: boolean;
-  classroomId: string;
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   _refetch: (...args: any[]) => any;
+  classroomData: {
+    students: {
+      id: string;
+      name: string | null;
+      email: string | null;
+      emailVerified: Date | null;
+      image: string | null;
+      role: string;
+    }[];
+    teacher: {
+      id: string;
+      name: string | null;
+      email: string | null;
+      emailVerified: Date | null;
+      image: string | null;
+      role: string;
+    };
+  } & {
+    name: string;
+    id: string;
+    createdAt: Date;
+    coverImage: string;
+  };
 };
 
 export default function AddStudentDialog(props: PrivateProps) {
@@ -37,6 +65,14 @@ export default function AddStudentDialog(props: PrivateProps) {
         return props._refetch();
       },
     });
+
+  const isStudentInClassroom = (studentId: string) => {
+    return props.classroomData.students.find(
+      (classStudent) => classStudent.id === studentId,
+    )
+      ? true
+      : false;
+  };
 
   const renderStudentList = studentListData?.map((student) => {
     return (
@@ -66,21 +102,27 @@ export default function AddStudentDialog(props: PrivateProps) {
           </div>
         </div>
         <div>
-          <Button
-            disabled={
-              isAddLoading &&
-              (studentAdding.find((id) => id === student.id) ? true : false)
-            }
-            size={"icon"}
-            onClick={() => handleAddStudent(student.id)}
-          >
-            {isAddLoading &&
-            (studentAdding.find((id) => id === student.id) ? true : false) ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <PlusIcon />
-            )}
-          </Button>
+          {isStudentInClassroom(student.id) ? (
+            <Button disabled={true} size={"icon"}>
+              <UserCheckIcon />
+            </Button>
+          ) : (
+            <Button
+              disabled={
+                isAddLoading &&
+                (studentAdding.find((id) => id === student.id) ? true : false)
+              }
+              size={"icon"}
+              onClick={() => handleAddStudent(student.id)}
+            >
+              {isAddLoading &&
+              (studentAdding.find((id) => id === student.id) ? true : false) ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                <UserPlusIcon />
+              )}
+            </Button>
+          )}
         </div>
       </div>
     );
@@ -91,7 +133,7 @@ export default function AddStudentDialog(props: PrivateProps) {
     setStudentAdding(AddedStudentQueue);
     await addStudent({
       studentId,
-      classroomId: props.classroomId,
+      classroomId: props.classroomData.id,
     });
     const removedStudentQueue = studentAdding.filter((id) => id === studentId);
     setStudentAdding(removedStudentQueue);
