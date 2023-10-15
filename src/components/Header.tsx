@@ -13,7 +13,10 @@ export const Header = () => {
   const { data: sessionData } = useSession();
 
   return (
-    <div className="sticky top-0 flex min-h-[64px] w-full items-center justify-between px-5 py-3 pl-12 shadow-sm dark:bg-neutral-900 dark:text-gray-300 dark:shadow-neutral-950">
+    <div
+      onClick={() => console.log(sessionData)}
+      className="sticky top-0 flex min-h-[64px] w-full items-center justify-between px-5 py-3 pl-12 shadow-sm dark:bg-neutral-900 dark:text-gray-300 dark:shadow-neutral-950"
+    >
       <div className="flex gap-16">
         <Link
           href="/"
@@ -29,10 +32,7 @@ export const Header = () => {
           >
             Từ Điển
           </Link>
-          <Link
-            href="/class/dashboard"
-            className="cursor-pointer hover:text-gray-100"
-          >
+          <Link href="/class" className="cursor-pointer hover:text-gray-100">
             Lớp học
           </Link>
         </div>
@@ -71,7 +71,7 @@ export const Header = () => {
           className="font-bold hover:cursor-pointer"
           onClick={() => signIn("google")}
         >
-          Sign in
+          Đăng nhập
         </div>
       )}
     </div>

@@ -5,12 +5,22 @@ import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 
 type PrivateProps = {
-  classListData: {
+  classListData: ({
+    teacher: {
+      id: string;
+      name: string | null;
+      email: string | null;
+      emailVerified: Date | null;
+      image: string | null;
+      role: string;
+    };
+  } & {
     id: string;
-    coverImage: string | undefined;
     name: string;
-    teacher: string;
-  }[];
+    createdAt: Date;
+    teacherId: string;
+    coverImage: string;
+  })[];
 };
 
 export default function ClassListView(props: PrivateProps) {
@@ -32,7 +42,9 @@ export default function ClassListView(props: PrivateProps) {
 
         <div className="flex flex-col items-center justify-center">
           <div className="font-bold">{classData.name}</div>
-          <div className="text-sm text-neutral-400">{classData.teacher}</div>
+          <div className="text-sm text-neutral-400">
+            {classData.teacher?.name}
+          </div>
         </div>
       </Link>
     );

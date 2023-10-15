@@ -112,22 +112,19 @@ export default function StudentClassList() {
 
   return (
     <div className="flex w-full flex-col gap-10 overflow-auto px-2 py-5 pr-6">
-      {/* <div className="rounded-lg p-4 dark:bg-neutral-900 dark:text-neutral-300">
-        <div className="text-3xl">{`Xin chào ${sessionData?.user.name}`}</div>
-      </div> */}
       <div className="flex flex-col gap-4 dark:text-neutral-300">
         <div className="flex justify-between">
           <div className="text-3xl font-bold">Lớp học của bạn:</div>
           {/* <Input type="text" placeholder="Tìm kiếm..." className="w-[400px]" /> */}
         </div>
-        <ClassListView classListData={CLASS_DATA} />
+        {/* <ClassListView classListData={CLASS_DATA} /> */}
       </div>
       <div className="flex flex-col gap-4 dark:text-neutral-300">
         <div className="flex justify-between">
           <div className="text-3xl font-bold">Tất cả các lớp:</div>
           <Input type="text" placeholder="Tìm kiếm..." className="w-[400px]" />
         </div>
-        <ClassListView classListData={CLASS_DATA2} />
+        {/* <ClassListView classListData={CLASS_DATA2} /> */}
       </div>
     </div>
   );

@@ -8,13 +8,18 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 type PrivateProps = {
-  pathname: string;
+  // pathname: string;
 };
 
 export default function ClassSideMenu(props: PrivateProps) {
   const [selectedMenu, setSelectedMenu] = useState("");
+
+  const searchParams = useSearchParams();
+  const tabParams = searchParams.get("tab");
+
   return (
     <div className="flex dark:bg-neutral-800 ">
       <div className="h-[100%] w-[284px] p-5">
@@ -23,52 +28,49 @@ export default function ClassSideMenu(props: PrivateProps) {
             <BookOpenIcon size={"60px"} />
             <div className="text-2xl">Learn Sign</div>
           </div>
-          <Link href="/class/dashboard" className="flex flex-col px-4 py-1">
+          <Link href="/class?tab=dashboard" className="flex flex-col px-4 py-1">
             <div
               className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
-                props.pathname === "/class/dashboard"
-                  ? "bg-neutral-800 font-bold"
-                  : ""
+                tabParams === "dashboard" ? "bg-neutral-800 font-bold" : ""
               }`}
             >
               <LayoutDashboardIcon />
               <div>Dashboard</div>
             </div>
           </Link>
-          <Link href="/class" className="flex flex-col px-4 py-1">
+          <Link
+            href="/class?tab=classrooms"
+            className="flex flex-col px-4 py-1"
+          >
             <div
               className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
-                props.pathname === "/class" ? "bg-neutral-800 font-bold" : ""
+                tabParams === "classrooms" ? "bg-neutral-800 font-bold" : ""
               }`}
             >
               <GraduationCapIcon />
               <div>Lớp học</div>
             </div>
           </Link>
-          <Link href="/class/students" className="flex flex-col px-4 py-1">
+          <Link href="/class?tab=students" className="flex flex-col px-4 py-1">
             <div
               className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
-                props.pathname === "/class/students"
-                  ? "bg-neutral-800 font-bold"
-                  : ""
+                tabParams === "students" ? "bg-neutral-800 font-bold" : ""
               }`}
             >
               <UsersIcon />
               <div>Học Sinh</div>
             </div>
           </Link>
-          <div className="flex flex-col px-4 py-1">
+          <Link href="/class?tab=chat" className="flex flex-col px-4 py-1">
             <div
               className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
-                props.pathname === "/class/chat"
-                  ? "bg-neutral-800 font-bold"
-                  : ""
+                tabParams === "chat" ? "bg-neutral-800 font-bold" : ""
               }`}
             >
               <MessageCircleIcon />
               <div>Trao đổi</div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </div>

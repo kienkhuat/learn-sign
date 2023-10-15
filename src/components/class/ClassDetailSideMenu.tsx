@@ -10,45 +10,71 @@ import {
   UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 type PrivateProps = {
   pathname: string;
-};
-
-const CLASS_DATA = {
-  id: "1",
-  name: "Lớp dạy ký hiệu 1",
-  teacher: {
-    name: "Giảng viên 1",
-  },
+  classroomData: {
+    students: {
+      id: string;
+      name: string | null;
+      email: string | null;
+      emailVerified: Date | null;
+      image: string | null;
+      role: string;
+    }[];
+    teacher: {
+      id: string;
+      name: string | null;
+      email: string | null;
+      emailVerified: Date | null;
+      image: string | null;
+      role: string;
+    };
+  } & {
+    name: string;
+    id: string;
+    createdAt: Date;
+    coverImage: string;
+  };
 };
 
 export default function ClassDetailSideMenu(props: PrivateProps) {
   const [selectedMenu, setSelectedMenu] = useState("");
 
+  const searchParams = useSearchParams();
+  const tabParams = searchParams.get("tab");
+
   return (
-    <div className="flex dark:bg-neutral-800 ">
+    <div
+      className="flex dark:bg-neutral-800 "
+      onClick={() => {
+        // console.log(props.classroomData);
+      }}
+    >
       <div className="h-[100%] w-[284px] p-5">
         <div className="flex h-[100%] flex-col justify-between rounded-3xl shadow-md dark:bg-neutral-900  dark:text-neutral-300 dark:shadow-neutral-950">
           <div>
             <div className="mb-10 mt-10 flex flex-col items-center gap-3">
-              <div className="text-2xl font-bold">{CLASS_DATA.name}</div>
-              <div className="text-neutral-400">{CLASS_DATA.teacher.name}</div>
+              <div className="text-2xl font-bold">
+                {props.classroomData?.name}
+              </div>
+              <div className="text-neutral-400">
+                {props.classroomData?.teacher?.name}
+              </div>
             </div>
             <Link
               href={{
-                pathname: "/class/[classId]/",
-                query: { classId: CLASS_DATA.id },
+                pathname: "/class/[classId]",
+                query: { classId: props.classroomData?.id, tab: "documents" },
               }}
               className="flex flex-col px-4 py-1"
             >
               <div
                 className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
-                  props.pathname === `/class/[classId]`
-                    ? "bg-neutral-800 font-bold"
-                    : ""
+                  tabParams === `documents` ? "bg-neutral-800 font-bold" : ""
                 }`}
               >
                 <FileTextIcon />
@@ -57,16 +83,14 @@ export default function ClassDetailSideMenu(props: PrivateProps) {
             </Link>
             <Link
               href={{
-                pathname: "/class/[classId]/students",
-                query: { classId: CLASS_DATA.id },
+                pathname: "/class/[classId]",
+                query: { classId: props.classroomData?.id, tab: "students" },
               }}
               className="flex flex-col px-4 py-1"
             >
               <div
                 className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
-                  props.pathname === "/class/[classId]/students"
-                    ? "bg-neutral-800 font-bold"
-                    : ""
+                  tabParams === "students" ? "bg-neutral-800 font-bold" : ""
                 }`}
               >
                 <UsersIcon />
@@ -75,16 +99,14 @@ export default function ClassDetailSideMenu(props: PrivateProps) {
             </Link>
             <Link
               href={{
-                pathname: "/class/[classId]/assignments",
-                query: { classId: CLASS_DATA.id },
+                pathname: "/class/[classId]",
+                query: { classId: props.classroomData?.id, tab: "assignments" },
               }}
               className="flex flex-col px-4 py-1"
             >
               <div
                 className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
-                  props.pathname === "/class/[classId]/assignments"
-                    ? "bg-neutral-800 font-bold"
-                    : ""
+                  tabParams === "assignments" ? "bg-neutral-800 font-bold" : ""
                 }`}
               >
                 <PenSquareIcon />
@@ -92,7 +114,7 @@ export default function ClassDetailSideMenu(props: PrivateProps) {
               </div>
             </Link>
             <div>
-              <Link href="/class/dashboard" className="flex flex-col px-4 py-1">
+              <Link href="/class" className="flex flex-col px-4 py-1">
                 <div className={`flex cursor-pointer gap-3 rounded-lg p-3 `}>
                   <ArrowLeftFromLineIcon />
                   <div>Quay về</div>

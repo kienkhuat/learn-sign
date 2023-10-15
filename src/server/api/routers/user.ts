@@ -12,6 +12,15 @@ export const userRouter = createTRPCRouter({
   findAllUser: protectedProcedure.query(({ ctx }) => {
     return ctx.db.user.findMany();
   }),
+
+  findAllStudents: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.user.findMany({
+      where: {
+        role: "student",
+      },
+    });
+  }),
+
   findUser: protectedProcedure
     .input(
       z.object({

@@ -28,9 +28,9 @@ export default function CreateClassDialog(props: PrivateProps) {
 
   const { mutateAsync: apiCreateClassroom } =
     api.classroom.createClassroom.useMutation({
-      // onSuccess(data, variables, context) {
-      //   return props._refetch();
-      // },
+      onSuccess(data, variables, context) {
+        return props._refetch();
+      },
     });
 
   const handleCreateClass = async () => {

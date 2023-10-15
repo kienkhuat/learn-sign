@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Header } from "~/components/Header";
@@ -12,6 +13,15 @@ export default function Home() {
 
   const { data: sessionData } = useSession();
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const tabParams = searchParams.get("tab");
+
+  useEffect(() => {
+    if (!tabParams) {
+      router.push("/class?tab=dashboard");
+    }
+  }, [tabParams]);
 
   useEffect(() => {
     if (darkMode) {
@@ -44,7 +54,7 @@ export default function Home() {
           <Header />
           {sessionData ? (
             <div className="flex h-[calc(100%-64px)] w-full">
-              <ClassSideMenu pathname={router.pathname} />
+              <ClassSideMenu />
               {renderRoleClassList()}
             </div>
           ) : (
