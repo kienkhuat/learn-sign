@@ -12,7 +12,9 @@ export const classroomRouter = createTRPCRouter({
   createClassroom: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
+        name: z.string().min(1, { message: "Class name is empty" }).max(100, {
+          message: "Class name must be less than 100 characters.",
+        }),
         teacherId: z.string(),
         coverImage: z.string(),
       }),

@@ -35,11 +35,13 @@ export default function CreateClassDialog(props: PrivateProps) {
 
   const handleCreateClass = async () => {
     if (!sessionData) return false;
+    //TODO: Show error when class name is empty or only filled with white space
+    if (!className || !className.replace(/\s/g, "").length) return false;
+
     setIsLoading(true);
     const createClassData = {
       name: className,
       teacherId: sessionData.user.id,
-      //TODO: Store image somewhere else and not base64
       coverImage:
         base64Images[Math.floor(Math.random() * base64Images.length)] || "",
     };
