@@ -52,12 +52,18 @@ type PrivateProps = {
 
 export default function AddStudentDialog(props: PrivateProps) {
   const [searchInput, setSearchInput] = useState("");
+  const [studentSearchInput, setStudentSearchInput] = useState("");
   const [studentAdding, setStudentAdding] = useState([""]);
 
   const { data: sessionData } = useSession();
 
-  const { data: studentListData, refetch } =
-    api.user.findAllStudents.useQuery();
+  const {
+    data: studentListData,
+    isLoading: isStudentListLoading,
+    refetch: refetchStudentList,
+  } = api.user.findAllOrSearchStudents.useQuery({
+    searchInput,
+  });
 
   const { mutateAsync: addStudent, isLoading: isAddLoading } =
     api.classroom.addStudentToClass.useMutation({
@@ -147,6 +153,14 @@ export default function AddStudentDialog(props: PrivateProps) {
     setStudentAdding(removedStudentQueue);
   };
 
+  const handleSearchStudent = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === "Enter") {
+      setSearchInput(studentSearchInput);
+    }
+  };
+
   return (
     <>
       <Dialog open={props.isOpen} onOpenChange={props._setIsOpen}>
@@ -161,12 +175,21 @@ export default function AddStudentDialog(props: PrivateProps) {
                   className="mb-3 w-[97%]"
                   type="text"
                   placeholder="Tìm kiếm..."
+                  onKeyDown={(e) => handleSearchStudent(e)}
+                  onChange={(e) => setStudentSearchInput(e.currentTarget.value)}
                 />
               </div>
 
-              <div className="flex max-h-[600px] flex-col gap-2 overflow-y-scroll">
-                <div className="flex flex-col gap-2">{renderStudentList}</div>
-              </div>
+              {isStudentListLoading ? (
+                <div className="flex justify-center py-5">
+                  <Loader2Icon className="h-[40px] w-[40px] animate-spin" />
+                </div>
+              ) : (
+                <div className="flex max-h-[600px] flex-col gap-2 overflow-y-scroll">
+                  <div className="flex flex-col gap-2">{renderStudentList}</div>
+                </div>
+              )}
+
               <div className="mr-4 mt-3 flex justify-end gap-2">
                 <Button
                   onClick={() => props._setIsOpen(false)}

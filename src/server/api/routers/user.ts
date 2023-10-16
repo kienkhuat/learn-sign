@@ -21,6 +21,31 @@ export const userRouter = createTRPCRouter({
     });
   }),
 
+  findAllOrSearchStudents: protectedProcedure
+    .input(
+      z.object({
+        searchInput: z.string() || "",
+      }),
+    )
+    .query(({ ctx, input }) => {
+      if (!input.searchInput) {
+        return ctx.db.user.findMany({
+          where: {
+            role: "student",
+          },
+        });
+      }
+      return ctx.db.user.findMany({
+        where: {
+          role: "student",
+          name: {
+            contains: input.searchInput,
+            mode: "insensitive",
+          },
+        },
+      });
+    }),
+
   findUser: protectedProcedure
     .input(
       z.object({
