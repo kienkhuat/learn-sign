@@ -63,6 +63,7 @@ export default function Home() {
         return (
           <ClassroomDocumentScreen
             _refetch={refetch}
+            isLoading={isLoading}
             classroomData={classroomData!}
           />
         );
@@ -70,6 +71,7 @@ export default function Home() {
         return (
           <ClassroomStudentListScreen
             _refetch={refetch}
+            isLoading={isLoading}
             classroomData={classroomData!}
           />
         );
@@ -77,6 +79,7 @@ export default function Home() {
         return (
           <ClassroomAssignmentScreen
             _refetch={refetch}
+            isLoading={isLoading}
             classroomData={classroomData!}
           />
         );
@@ -91,7 +94,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="h-full">
-        <div className="h-full dark:bg-neutral-800">
+        <div className="dark: h-full text-neutral-300 dark:bg-neutral-800">
           <Header />
           {renderTabScreen()}
         </div>

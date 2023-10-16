@@ -27,12 +27,13 @@ type PrivateProps = {
     coverImage: string;
   };
   _refetch: (...args: any[]) => any;
+  isLoading: boolean;
 };
 
 export default function ClassroomStudentListScreen(props: PrivateProps) {
   return (
     <>
-      {props.classroomData ? (
+      {!props.isLoading ? (
         <div className="flex h-[calc(100%-64px)] w-full">
           <ClassDetailSideMenu classroomData={props.classroomData!} />
           <ClassroomStudentList
@@ -41,7 +42,7 @@ export default function ClassroomStudentListScreen(props: PrivateProps) {
           />
         </div>
       ) : (
-        <div>
+        <div className="mt-10 flex justify-center">
           <Loader2Icon className="animate-spin" />
         </div>
       )}
