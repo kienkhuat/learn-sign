@@ -129,12 +129,20 @@ export default function AddStudentDialog(props: PrivateProps) {
   });
 
   const handleAddStudent = async (studentId: string) => {
+    if (!sessionData) return false;
+
     const AddedStudentQueue = [...studentAdding, studentId];
     setStudentAdding(AddedStudentQueue);
+
     await addStudent({
       studentId,
-      classroomId: props.classroomData.id,
+      classroomData: {
+        id: props.classroomData.id,
+        teacherId: props.classroomData.teacher.id,
+      },
+      userId: sessionData.user.id,
     });
+
     const removedStudentQueue = studentAdding.filter((id) => id === studentId);
     setStudentAdding(removedStudentQueue);
   };

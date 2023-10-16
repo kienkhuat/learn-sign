@@ -89,13 +89,36 @@ export const classroomRouter = createTRPCRouter({
     .input(
       z.object({
         studentId: z.string(),
-        classroomId: z.string(),
+        classroomData: z.object({
+          id: z.string(),
+          teacherId: z.string(),
+        }),
+        userId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const foundUser = await findUser({
+        db: ctx.db,
+        input: { id: input.userId },
+      });
+
+      if (!foundUser) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Must be logged in",
+        });
+      }
+
+      if (foundUser.id !== input.classroomData.teacherId) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Must be the classroom's teacher to add",
+        });
+      }
+
       const updatedClassroom = await ctx.db.classroom.update({
         where: {
-          id: input.classroomId,
+          id: input.classroomData.id,
         },
         data: {
           //can use .map to add multiple
@@ -119,6 +142,7 @@ export const classroomRouter = createTRPCRouter({
       z.object({
         studentId: z.string(),
         classroomId: z.string(),
+        userId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -126,9 +150,31 @@ export const classroomRouter = createTRPCRouter({
         where: { id: input.classroomId },
         include: { students: true, teacher: true },
       });
+
       if (!foundClassroom) {
-        //todo: throw error
-        return;
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Classroom not found",
+        });
+      }
+
+      const foundUser = await findUser({
+        db: ctx.db,
+        input: { id: input.userId },
+      });
+
+      if (!foundUser) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Must be logged in",
+        });
+      }
+
+      if (foundUser.id !== foundClassroom.teacherId) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Must be the classroom's teacher to add",
+        });
       }
 
       const updatedClassroom = await ctx.db.classroom.update({

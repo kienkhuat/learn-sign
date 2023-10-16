@@ -5,6 +5,7 @@ import AddStudentDialog from "../../dialog/AddStudentDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { api } from "~/utils/api";
 import { Loader2Icon } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 type PrivateProps = {
   classroomData: {
@@ -37,6 +38,8 @@ export default function ClassroomStudentList(props: PrivateProps) {
   const [isAddStudentDialogOpen, setIsAddStudentDialogOpen] = useState(false);
   const [deletingStudent, setDeletingStudent] = useState([""]);
 
+  const { data: sessionData } = useSession();
+
   const { mutateAsync: removeStudent, isLoading } =
     api.classroom.removeStudentFromClass.useMutation({
       onSuccess(data, variables, context) {
@@ -65,37 +68,49 @@ export default function ClassroomStudentList(props: PrivateProps) {
         </div>
         <div className="flex justify-between">
           <div></div>
-          <Button
-            disabled={
-              isLoading &&
-              (deletingStudent.find((id) => id === student.id) ? true : false)
-            }
-            size={"sm"}
-            className="dark:bg-red-800 dark:text-white hover:dark:bg-red-950"
-            onClick={() => handleRemoveStudent(student.id)}
-          >
-            {isLoading &&
-            (deletingStudent.find((id) => id === student.id) ? true : false) ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              "Xóa"
-            )}
-          </Button>
+          {sessionData?.user.id === props.classroomData.teacher.id ? (
+            <Button
+              disabled={
+                isLoading &&
+                (deletingStudent.find((id) => id === student.id) ? true : false)
+              }
+              size={"sm"}
+              className="dark:bg-red-800 dark:text-white hover:dark:bg-red-950"
+              onClick={() => handleRemoveStudent(student.id)}
+            >
+              {isLoading &&
+              (deletingStudent.find((id) => id === student.id)
+                ? true
+                : false) ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                "Xóa"
+              )}
+            </Button>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     );
   });
 
   const handleRemoveStudent = async (studentId: string) => {
+    if (!sessionData) return;
+
     const AddedStudentQueue = [...deletingStudent, studentId];
     setDeletingStudent(AddedStudentQueue);
+
     await removeStudent({
       classroomId: props.classroomData.id,
       studentId: studentId,
+      userId: sessionData.user.id,
     });
+
     const removedStudentQueue = deletingStudent.filter(
       (id) => id === studentId,
     );
+
     setDeletingStudent(removedStudentQueue);
   };
 
@@ -112,9 +127,13 @@ export default function ClassroomStudentList(props: PrivateProps) {
               placeholder="Tìm kiếm..."
               className="w-[400px] text-neutral-300"
             />
-            <Button onClick={() => setIsAddStudentDialogOpen(true)}>
-              Thêm
-            </Button>
+            {sessionData?.user.id === props.classroomData.teacher.id ? (
+              <Button onClick={() => setIsAddStudentDialogOpen(true)}>
+                Thêm
+              </Button>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         <div className="grid items-center gap-4 lg:grid-cols-4 2xl:grid-cols-4">
