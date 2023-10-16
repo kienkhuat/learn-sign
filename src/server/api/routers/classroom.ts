@@ -22,11 +22,19 @@ export const classroomRouter = createTRPCRouter({
         db: ctx.db,
         input: { id: input.teacherId },
       });
-      if (foundUser?.role === "teacher" || foundUser?.role === "admin") {
+      if (!foundUser) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User Not Found",
+        });
+      }
+      if (foundUser.role === "teacher" || foundUser.role === "admin") {
         return ctx.db.classroom.create({ data: { ...input } });
       } else {
-        console.log("Create Classroom Error");
-        console.log({ input, foundUser });
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Must be a teacher or an admin",
+        });
       }
     }),
 
@@ -57,8 +65,8 @@ export const classroomRouter = createTRPCRouter({
       });
       if (!foundUser) {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Must be logged in",
+          code: "NOT_FOUND",
+          message: "User Not Found",
         });
       }
       if (foundUser.role !== "admin" && foundUser.role !== "teacher") {
@@ -95,12 +103,71 @@ export const classroomRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
+        searchInput: z.string() || "",
       }),
     )
     .query(async ({ ctx, input }) => {
       const foundUser = await findUser({
         db: ctx.db,
         input: { id: input.userId },
+      });
+      if (!foundUser) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User Not Found",
+        });
+      }
+      if (!input.searchInput) {
+        return ctx.db.classroom.findMany({
+          where: {
+            id: {
+              in: [...foundUser.classrooms.map((classroom) => classroom.id)],
+            },
+          },
+          include: {
+            teacher: true,
+          },
+        });
+      }
+      return ctx.db.classroom.findMany({
+        where: {
+          id: {
+            in: [...foundUser.classrooms.map((classroom) => classroom.id)],
+          },
+          name: {
+            contains: input.searchInput,
+          },
+        },
+        include: {
+          teacher: true,
+        },
+      });
+    }),
+
+  findAllClassrooms: protectedProcedure
+    .input(
+      z.object({
+        searchInput: z.string() || "",
+      }),
+    )
+    .query(({ ctx, input }) => {
+      if (!input.searchInput) {
+        return ctx.db.classroom.findMany({
+          include: {
+            teacher: true,
+          },
+        });
+      }
+      return ctx.db.classroom.findMany({
+        where: {
+          name: {
+            contains: input.searchInput,
+            mode: "insensitive",
+          },
+        },
+        include: {
+          teacher: true,
+        },
       });
     }),
 

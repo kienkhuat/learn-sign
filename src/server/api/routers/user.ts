@@ -72,5 +72,9 @@ export async function findUser({
 }) {
   return db.user.findUnique({
     where: { id: input.id },
+    include: {
+      classrooms: true,
+      createdClassrooms: true,
+    },
   });
 }
