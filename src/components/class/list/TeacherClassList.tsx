@@ -12,6 +12,8 @@ import { Loader2Icon } from "lucide-react";
 
 export default function TeacherClassList() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [classSearchInput, setClassSearchInput] = useState("");
+  const [classSearchValue, setClassSearchValue] = useState("");
 
   const { data: sessionData } = useSession();
 
@@ -21,7 +23,14 @@ export default function TeacherClassList() {
     refetch,
   } = api.classroom.findTeacherClassrooms.useQuery({
     userId: sessionData?.user.id || "",
+    searchInput: classSearchInput,
   });
+
+  const handleSearchClass = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      setClassSearchInput(classSearchValue);
+    }
+  };
 
   return (
     <>
@@ -34,6 +43,8 @@ export default function TeacherClassList() {
                 type="text"
                 placeholder="Tìm kiếm..."
                 className="w-[400px]"
+                onKeyDown={(e) => handleSearchClass(e)}
+                onChange={(e) => setClassSearchValue(e.currentTarget.value)}
               />
               <Button onClick={() => setIsDialogOpen(true)}>Tạo Lớp</Button>
             </div>

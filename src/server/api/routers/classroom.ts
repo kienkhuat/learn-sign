@@ -47,6 +47,7 @@ export const classroomRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
+        searchInput: z.string() || "",
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -66,9 +67,23 @@ export const classroomRouter = createTRPCRouter({
           message: "Must be a teacher or admin",
         });
       }
+      if (!input.searchInput) {
+        return ctx.db.classroom.findMany({
+          where: {
+            teacherId: input.userId,
+          },
+          include: {
+            teacher: true,
+          },
+        });
+      }
       return ctx.db.classroom.findMany({
         where: {
           teacherId: input.userId,
+          name: {
+            contains: input.searchInput,
+            mode: "insensitive",
+          },
         },
         include: {
           teacher: true,
@@ -77,7 +92,11 @@ export const classroomRouter = createTRPCRouter({
     }),
 
   findStudentClassrooms: protectedProcedure
-    .input(z.object({ userId: z.string() }))
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       const foundUser = await findUser({
         db: ctx.db,
