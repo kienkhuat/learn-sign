@@ -35,34 +35,13 @@ import {
   useUploadThing,
 } from "~/utils/uploadthing";
 import { AssignmentUploadDropzone } from "../AssignmentUploadDropzone";
+import { classroomDataType } from "~/types/types";
 
 type PrivateProps = {
   isOpen: boolean;
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   _refetch: (...args: any[]) => any;
-  classroomData: {
-    students: {
-      id: string;
-      name: string | null;
-      email: string | null;
-      emailVerified: Date | null;
-      image: string | null;
-      role: string;
-    }[];
-    teacher: {
-      id: string;
-      name: string | null;
-      email: string | null;
-      emailVerified: Date | null;
-      image: string | null;
-      role: string;
-    };
-  } & {
-    name: string;
-    id: string;
-    createdAt: Date;
-    coverImage: string;
-  };
+  classroomData: classroomDataType;
   isLoading: boolean;
 };
 

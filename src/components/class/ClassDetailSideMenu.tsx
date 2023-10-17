@@ -13,31 +13,10 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { classroomDataType } from "~/types/types";
 
 type PrivateProps = {
-  classroomData: {
-    students: {
-      id: string;
-      name: string | null;
-      email: string | null;
-      emailVerified: Date | null;
-      image: string | null;
-      role: string;
-    }[];
-    teacher: {
-      id: string;
-      name: string | null;
-      email: string | null;
-      emailVerified: Date | null;
-      image: string | null;
-      role: string;
-    };
-  } & {
-    name: string;
-    id: string;
-    createdAt: Date;
-    coverImage: string;
-  };
+  classroomData: classroomDataType;
 };
 
 export default function ClassDetailSideMenu(props: PrivateProps) {

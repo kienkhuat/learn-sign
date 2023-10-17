@@ -49,7 +49,7 @@ export const classroomRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.classroom.findUnique({
         where: { id: input.classId },
-        include: { students: true, teacher: true },
+        include: { students: true, teacher: true, assignments: true },
       });
     }),
 

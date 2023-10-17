@@ -6,31 +6,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { api } from "~/utils/api";
 import { Loader2Icon } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { classroomDataType } from "~/types/types";
 
 type PrivateProps = {
-  classroomData: {
-    students: {
-      id: string;
-      name: string | null;
-      email: string | null;
-      emailVerified: Date | null;
-      image: string | null;
-      role: string;
-    }[];
-    teacher: {
-      id: string;
-      name: string | null;
-      email: string | null;
-      emailVerified: Date | null;
-      image: string | null;
-      role: string;
-    };
-  } & {
-    name: string;
-    id: string;
-    createdAt: Date;
-    coverImage: string;
-  };
+  classroomData: classroomDataType;
   _refetch: (...args: any[]) => any;
   isLoading: boolean;
 };
