@@ -39,6 +39,7 @@ export default function ClassroomStudentListScreen(props: PrivateProps) {
           <ClassroomStudentList
             classroomData={props.classroomData}
             _refetch={props._refetch}
+            isLoading={props.isLoading}
           />
         </div>
       ) : (

@@ -32,6 +32,7 @@ type PrivateProps = {
     coverImage: string;
   };
   _refetch: (...args: any[]) => any;
+  isLoading: boolean;
 };
 
 export default function ClassroomStudentList(props: PrivateProps) {
@@ -136,9 +137,21 @@ export default function ClassroomStudentList(props: PrivateProps) {
             )}
           </div>
         </div>
-        <div className="grid items-center gap-4 lg:grid-cols-4 2xl:grid-cols-4">
-          {renderStudentList}
-        </div>
+        {!isLoading ? (
+          <div>
+            {props.classroomData.students.length > 0 ? (
+              <div className="grid items-center gap-4 lg:grid-cols-4 2xl:grid-cols-4">
+                {renderStudentList}
+              </div>
+            ) : (
+              <div>Lớp chưa có học sinh</div>
+            )}
+          </div>
+        ) : (
+          <div className="flex justify-center pt-8">
+            <Loader2Icon className="animate-spin" />
+          </div>
+        )}
       </div>
       <AddStudentDialog
         isOpen={isAddStudentDialogOpen}
