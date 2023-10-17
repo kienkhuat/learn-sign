@@ -32,27 +32,56 @@ model Word {
 }
 
 model Classroom {
-    id         String   @id @default(cuid())
-    name       String
-    createdAt  DateTime @default(now())
-    students   User[]   @relation("StudentClassroom")
-    teacherId  String
-    coverImage String
-    teacher    User     @relation("TeacherClassroom", fields: [teacherId], references: [id], onDelete: Cascade)
+    id          String       @id @default(cuid())
+    name        String
+    createdAt   DateTime     @default(now())
+    students    User[]       @relation("StudentClassroom")
+    teacherId   String
+    coverImage  String
+    teacher     User         @relation("TeacherClassroom", fields: [teacherId], references: [id], onDelete: Cascade)
+    assignments Assignment[]
+}
+
+model Assignment {
+    id          String       @id @default(cuid())
+    name        String
+    task        String       @db.Text
+    classroomId String
+    classroom   Classroom    @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+    createdAt   DateTime     @default(now())
+    deadline    DateTime
+    submissions Submission[]
+    attachments Json[]
+    teacherId   String
+    teacher     User         @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+}
+
+model Submission {
+    id             String     @id @default(cuid())
+    assignmentId   String
+    assignment     Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+    grade          Int
+    comment        String
+    teacherComment String
+    attachments    Json[]
+    studentId      String
+    student        User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
 
 // Necessary for Next auth
 model User {
-    id                String      @id @default(cuid())
-    name              String?
-    email             String?     @unique
-    emailVerified     DateTime?
-    image             String?
-    role              String      @default("student")
-    accounts          Account[]
-    sessions          Session[]
-    classrooms        Classroom[] @relation("StudentClassroom")
-    createdClassrooms Classroom[] @relation("TeacherClassroom")
+    id                 String       @id @default(cuid())
+    name               String?
+    email              String?      @unique
+    emailVerified      DateTime?
+    image              String?
+    role               String       @default("student")
+    accounts           Account[]
+    sessions           Session[]
+    classrooms         Classroom[]  @relation("StudentClassroom")
+    createdClassrooms  Classroom[]  @relation("TeacherClassroom")
+    createdAssignments Assignment[]
+    submissions        Submission[]
 }
 
 model Account {

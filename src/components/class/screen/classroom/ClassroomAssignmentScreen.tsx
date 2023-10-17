@@ -2,6 +2,7 @@ import React from "react";
 import ClassDetailSideMenu from "../../ClassDetailSideMenu";
 import { Loader2Icon } from "lucide-react";
 import ClassroomStudentList from "../../list/classroom/ClassroomStudentList";
+import ClassroomAssignmentList from "../../list/classroom/ClassroomAssignmentList";
 type PrivateProps = {
   classroomData: {
     students: {
@@ -36,7 +37,11 @@ export default function ClassroomAssignmentScreen(props: PrivateProps) {
       {!props.isLoading ? (
         <div className="flex h-[calc(100%-64px)] w-full">
           <ClassDetailSideMenu classroomData={props.classroomData!} />
-          {/* Show Assignments here */}
+          <ClassroomAssignmentList
+            classroomData={props.classroomData}
+            _refetch={props._refetch}
+            isLoading={props.isLoading}
+          />
         </div>
       ) : (
         <div className="mt-10 flex justify-center">
