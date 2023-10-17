@@ -3,31 +3,10 @@ import React, { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import CreateAssignmentDialog from "../../dialog/CreateAssignmentDialog";
+import { classroomDataType } from "~/types/types";
 
 type PrivateProps = {
-  classroomData: {
-    students: {
-      id: string;
-      name: string | null;
-      email: string | null;
-      emailVerified: Date | null;
-      image: string | null;
-      role: string;
-    }[];
-    teacher: {
-      id: string;
-      name: string | null;
-      email: string | null;
-      emailVerified: Date | null;
-      image: string | null;
-      role: string;
-    };
-  } & {
-    name: string;
-    id: string;
-    createdAt: Date;
-    coverImage: string;
-  };
+  classroomData: classroomDataType;
   _refetch: (...args: any[]) => any;
   isLoading: boolean;
 };
@@ -36,6 +15,26 @@ export default function ClassroomAssignmentList(props: PrivateProps) {
   const [isCreateAssignmentDialogOpen, setIsCreateAssignmentDialogOpen] =
     useState(false);
   const { data: sessionData } = useSession();
+
+  const renderAssignmentList = () => {
+    const assignments = props.classroomData.assignments.map(
+      (assignment, index) => {
+        return (
+          <div
+            key={assignment.id}
+            className="rounded-lg p-2 shadow-md dark:bg-neutral-900 dark:shadow-neutral-950"
+          >
+            <div>{assignment.name}</div>
+          </div>
+        );
+      },
+    );
+    return (
+      <div className="grid items-center gap-2 lg:grid-cols-4">
+        {assignments}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -58,8 +57,8 @@ export default function ClassroomAssignmentList(props: PrivateProps) {
               <></>
             )}
           </div>
-          {/* here */}
         </div>
+        {renderAssignmentList()}
       </div>
       <CreateAssignmentDialog
         _refetch={() => {}}

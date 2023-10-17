@@ -14,10 +14,7 @@ export default function ClassroomStudentListScreen(props: PrivateProps) {
   return (
     <>
       {!props.isLoading ? (
-        <div
-          className="flex h-[calc(100%-64px)] w-full"
-          onClick={() => console.log(props.classroomData)}
-        >
+        <div className="flex h-[calc(100%-64px)] w-full">
           <ClassDetailSideMenu classroomData={props.classroomData!} />
           <ClassroomStudentList
             classroomData={props.classroomData}

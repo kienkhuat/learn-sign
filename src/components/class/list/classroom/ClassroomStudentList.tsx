@@ -116,7 +116,8 @@ export default function ClassroomStudentList(props: PrivateProps) {
             )}
           </div>
         </div>
-        {!isLoading ? (
+        {/* TODO: Handle loading for this */}
+        {!false ? (
           <div>
             {props.classroomData.students.length > 0 ? (
               <div className="grid items-center gap-4 lg:grid-cols-4 2xl:grid-cols-4">

@@ -1,12 +1,6 @@
+import { Prisma } from "@prisma/client";
+
 export type classroomDataType = {
-  students: {
-    id: string;
-    name: string | null;
-    email: string | null;
-    emailVerified: Date | null;
-    image: string | null;
-    role: string;
-  }[];
   teacher: {
     id: string;
     name: string | null;
@@ -15,9 +9,28 @@ export type classroomDataType = {
     image: string | null;
     role: string;
   };
+  students: {
+    id: string;
+    name: string | null;
+    email: string | null;
+    emailVerified: Date | null;
+    image: string | null;
+    role: string;
+  }[];
+  assignments: {
+    id: string;
+    name: string;
+    task: string;
+    classroomId: string;
+    createdAt: Date;
+    deadline: Date;
+    attachments: Prisma.JsonValue[];
+    teacherId: string;
+  }[];
 } & {
-  name: string;
   id: string;
+  name: string;
   createdAt: Date;
+  teacherId: string;
   coverImage: string;
 };

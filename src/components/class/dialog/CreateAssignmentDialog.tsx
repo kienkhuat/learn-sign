@@ -45,6 +45,12 @@ type PrivateProps = {
   isLoading: boolean;
 };
 
+type uploadedFilesDataType = {
+  key: string;
+  name: string;
+  url: string;
+}[];
+
 export default function CreateAssignmentDialog(props: PrivateProps) {
   const [files, setFiles] = useState<File[]>([]);
 
@@ -52,13 +58,8 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
   const [task, setTask] = useState("");
   const [deadlineDate, setDeadlineDate] = React.useState<Date>();
   const [isDateSelectorOpen, setIsDateSelectorOpen] = useState(false);
-  const [uploadedFilesData, setUploadedFilesData] = useState([
-    {
-      key: "",
-      name: "",
-      url: "",
-    },
-  ]);
+  const [uploadedFilesData, setUploadedFilesData] =
+    useState<uploadedFilesDataType>();
 
   const { data: sessionData } = useSession();
 
@@ -77,7 +78,7 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
 
     await startUpload(files);
     await createAssignment({
-      attachments: [...uploadedFilesData],
+      attachments: uploadedFilesData?.length ? [...uploadedFilesData] : [],
       classroomId: props.classroomData.id,
       deadline: deadlineDate,
       name: assignmentName,
