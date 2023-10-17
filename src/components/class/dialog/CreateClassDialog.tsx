@@ -22,11 +22,10 @@ type PrivateProps = {
 
 export default function CreateClassDialog(props: PrivateProps) {
   const [className, setClassName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const { data: sessionData } = useSession();
 
-  const { mutateAsync: apiCreateClassroom } =
+  const { mutateAsync: apiCreateClassroom, isLoading: isCreateLoading } =
     api.classroom.createClassroom.useMutation({
       onSuccess(data, variables, context) {
         return props._refetch();
@@ -38,7 +37,6 @@ export default function CreateClassDialog(props: PrivateProps) {
     //TODO: Show error when class name is empty or only filled with white space
     if (!className || !className.replace(/\s/g, "").length) return false;
 
-    setIsLoading(true);
     const createClassData = {
       name: className,
       teacherId: sessionData.user.id,
@@ -49,7 +47,6 @@ export default function CreateClassDialog(props: PrivateProps) {
     await apiCreateClassroom({
       ...createClassData,
     });
-    setIsLoading(false);
     props._setIsOpen(false);
   };
 
@@ -73,14 +70,18 @@ export default function CreateClassDialog(props: PrivateProps) {
               />
               <div className="mr-1 flex justify-end gap-2">
                 <Button
-                  disabled={isLoading ? true : false}
+                  disabled={isCreateLoading ? true : false}
                   onClick={() => props._setIsOpen(false)}
                   className=" dark:bg-neutral-800 dark:text-white dark:hover:text-black"
                 >
                   Đóng
                 </Button>
                 <Button onClick={() => handleCreateClass()}>
-                  {isLoading ? <Loader2 className="animate-spin" /> : "Tạo"}
+                  {isCreateLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Tạo"
+                  )}
                 </Button>
               </div>
             </div>
