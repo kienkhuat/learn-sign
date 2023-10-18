@@ -76,7 +76,9 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
     if (!sessionData) return false;
     if (!deadlineDate || !assignmentName) return false;
 
-    await startUpload(files);
+    if (files.length) {
+      await startUpload(files);
+    }
     await createAssignment({
       attachments: uploadedFilesData?.length ? [...uploadedFilesData] : [],
       classroomId: props.classroomData.id,
