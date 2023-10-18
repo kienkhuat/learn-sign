@@ -10,13 +10,13 @@ type PrivateProps = {
   isLoading: boolean;
 };
 
-export default function ClassroomDocumentScreen(props: PrivateProps) {
+export default function ClassroomResourceScreen(props: PrivateProps) {
   return (
     <>
       {!props.isLoading ? (
         <div className="flex h-[calc(100%-64px)] w-full">
           <ClassDetailSideMenu classroomData={props.classroomData!} />
-          {/* Show documents here */}
+          {/* Show resources here */}
         </div>
       ) : (
         <div className="mt-10 flex justify-center">

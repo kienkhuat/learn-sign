@@ -46,13 +46,13 @@ export default function ClassDetailSideMenu(props: PrivateProps) {
             <Link
               href={{
                 pathname: "/class/[classId]",
-                query: { classId: props.classroomData?.id, tab: "documents" },
+                query: { classId: props.classroomData?.id, tab: "resources" },
               }}
               className="flex flex-col px-4 py-1"
             >
               <div
                 className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
-                  tabParams === `documents` ? "bg-neutral-800 font-bold" : ""
+                  tabParams === `resources` ? "bg-neutral-800 font-bold" : ""
                 }`}
               >
                 <FileTextIcon />

@@ -8,7 +8,7 @@ import { Header } from "~/components/Header";
 import ClassDetailSideMenu from "~/components/class/ClassDetailSideMenu";
 import StudentList from "~/components/class/list/classroom/ClassroomStudentList";
 import ClassroomAssignmentScreen from "~/components/class/screen/classroom/ClassroomAssignmentScreen";
-import ClassroomDocumentScreen from "~/components/class/screen/classroom/ClassroomDocumentScreen";
+import ClassroomResourceScreen from "~/components/class/screen/classroom/ClassroomResourceScreen";
 import ClassroomStudentListScreen from "~/components/class/screen/classroom/ClassroomStudentListScreen";
 
 import { api } from "~/utils/api";
@@ -45,7 +45,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!tabParams && router.isReady) {
-      router.push(`/class/${router.query.classId}?tab=documents`);
+      router.push(`/class/${router.query.classId}?tab=resources`);
     }
   }, [tabParams, router.isReady]);
 
@@ -59,9 +59,9 @@ export default function Home() {
 
   const renderTabScreen = () => {
     switch (tabParams) {
-      case "documents":
+      case "resources":
         return (
-          <ClassroomDocumentScreen
+          <ClassroomResourceScreen
             _refetch={refetch}
             isLoading={isLoading}
             classroomData={classroomData!}
