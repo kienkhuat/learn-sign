@@ -61,7 +61,7 @@ export default function ClassSideMenu(props: PrivateProps) {
               <div>Học Sinh</div>
             </div>
           </Link>
-          <Link href="/class?tab=chat" className="flex flex-col px-4 py-1">
+          {/* <Link href="/class?tab=chat" className="flex flex-col px-4 py-1">
             <div
               className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
                 tabParams === "chat" ? "bg-neutral-800 font-bold" : ""
@@ -70,7 +70,7 @@ export default function ClassSideMenu(props: PrivateProps) {
               <MessageCircleIcon />
               <div>Trao đổi</div>
             </div>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

@@ -91,6 +91,22 @@ export default function ClassDetailSideMenu(props: PrivateProps) {
                 <div>Bài tập</div>
               </div>
             </Link>
+            <Link
+              href={{
+                pathname: "/class/[classId]",
+                query: { classId: props.classroomData?.id, tab: "chatroom" },
+              }}
+              className="flex flex-col px-4 py-1"
+            >
+              <div
+                className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
+                  tabParams === "chatroom" ? "bg-neutral-800 font-bold" : ""
+                }`}
+              >
+                <MessageCircleIcon />
+                <div>Trao đổi</div>
+              </div>
+            </Link>
             <div>
               <Link href="/class" className="flex flex-col px-4 py-1">
                 <div className={`flex cursor-pointer gap-3 rounded-lg p-3 `}>

@@ -8,6 +8,7 @@ import { Header } from "~/components/Header";
 import ClassDetailSideMenu from "~/components/class/ClassDetailSideMenu";
 import StudentList from "~/components/class/list/classroom/ClassroomStudentList";
 import ClassroomAssignmentScreen from "~/components/class/screen/classroom/ClassroomAssignmentScreen";
+import ClassroomChatroomScreen from "~/components/class/screen/classroom/ClassroomChatroomScreen";
 import ClassroomResourceScreen from "~/components/class/screen/classroom/ClassroomResourceScreen";
 import ClassroomStudentListScreen from "~/components/class/screen/classroom/ClassroomStudentListScreen";
 
@@ -78,6 +79,14 @@ export default function Home() {
       case "assignments":
         return (
           <ClassroomAssignmentScreen
+            _refetchClassroomData={refetch}
+            isClassroomDataLoading={isLoading}
+            classroomData={classroomData!}
+          />
+        );
+      case "chatroom":
+        return (
+          <ClassroomChatroomScreen
             _refetch={refetch}
             isLoading={isLoading}
             classroomData={classroomData!}
