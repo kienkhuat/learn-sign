@@ -58,8 +58,6 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
   const [task, setTask] = useState("");
   const [deadlineDate, setDeadlineDate] = React.useState<Date>();
   const [isDateSelectorOpen, setIsDateSelectorOpen] = useState(false);
-  const [uploadedFilesData, setUploadedFilesData] =
-    useState<uploadedFilesDataType>();
 
   const { data: sessionData } = useSession();
 
@@ -69,6 +67,7 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
   } = api.assignment.createAssignment.useMutation({
     onSuccess(data, variables, context) {
       console.log("Success create assignment", data);
+      return props._refetch();
     },
   });
 
@@ -76,16 +75,15 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
     if (!sessionData) return false;
     if (!deadlineDate || !assignmentName) return false;
 
-    if (files.length) {
-      await startUpload(files);
-    }
-    await createAssignment({
-      attachments: uploadedFilesData?.length ? [...uploadedFilesData] : [],
-      classroomId: props.classroomData.id,
-      deadline: deadlineDate,
-      name: assignmentName,
-      task: task,
-      teacherId: sessionData.user.id,
+    await startUpload(files).then((res) => {
+      createAssignment({
+        attachments: res?.length ? [...res] : [],
+        classroomId: props.classroomData.id,
+        deadline: deadlineDate,
+        name: assignmentName,
+        task: task,
+        teacherId: sessionData.user.id,
+      });
     });
     closeDialog();
   };
@@ -95,8 +93,8 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
     {
       onClientUploadComplete: (res) => {
         if (!res) return console.log("No res in upload complete");
-        setUploadedFilesData([...res]);
         console.log("uploaded successfully!");
+        return res;
       },
       onUploadError: () => {
         console.log("error occurred while uploading");
@@ -105,7 +103,7 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
         console.log("upload has begun");
       },
       onUploadProgress: (progress) => {
-        console.log(progress);
+        console.log({ progress });
       },
     },
   );

@@ -3,37 +3,66 @@ import React, { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import CreateAssignmentDialog from "../../dialog/CreateAssignmentDialog";
-import { classroomDataType } from "~/types/types";
+import {
+  assignmentDataListType,
+  assignmentDataType,
+  classroomDataType,
+} from "~/types/types";
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMilliseconds,
+  differenceInMinutes,
+  format,
+  formatDistance,
+  intervalToDuration,
+} from "date-fns";
+import ClassroomAssignmentCard from "../../card/ClassroomAssignmentCard";
+import AssignmentDetailDialog from "../../dialog/AssignmentDetailDialog";
+import { Loader2Icon } from "lucide-react";
 
 type PrivateProps = {
   classroomData: classroomDataType;
-  _refetch: (...args: any[]) => any;
-  isLoading: boolean;
+  _refetchClassroomData: (...args: any[]) => any;
+  isClassroomDataLoading: boolean;
+
+  assignmentDataList: assignmentDataListType;
+  isAssignmentDataListLoading: boolean;
+  _refetchAssignmentListData: (...args: any[]) => any;
+
+  _setAssignmentSearchInput: React.Dispatch<
+    React.SetStateAction<string | undefined>
+  >;
 };
 
 export default function ClassroomAssignmentList(props: PrivateProps) {
   const [isCreateAssignmentDialogOpen, setIsCreateAssignmentDialogOpen] =
     useState(false);
+  const [isDetailAssignmentOpen, setIsDetailAssignmentOpen] =
+    useState<boolean>(false);
+  const [selectedAssignment, setSelectedAssignment] =
+    useState<assignmentDataType>();
+
+  const [searchInputValue, setSearchInputValue] = useState<string>();
+
   const { data: sessionData } = useSession();
 
-  const renderAssignmentList = () => {
-    const assignments = props.classroomData.assignments.map(
-      (assignment, index) => {
-        return (
-          <div
-            key={assignment.id}
-            className="rounded-lg p-2 shadow-md dark:bg-neutral-900 dark:shadow-neutral-950"
-          >
-            <div>{assignment.name}</div>
-          </div>
-        );
-      },
-    );
+  const assignments = props.assignmentDataList?.map((assignment, index) => {
     return (
-      <div className="grid items-center gap-2 lg:grid-cols-4">
-        {assignments}
-      </div>
+      <ClassroomAssignmentCard
+        key={assignment.id}
+        assignment={assignment}
+        classroomData={props.classroomData}
+        _setIsDetailAssignmentOpen={setIsDetailAssignmentOpen}
+        _setSelectedAssignment={setSelectedAssignment}
+      />
     );
+  });
+
+  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      props._setAssignmentSearchInput(searchInputValue);
+    }
   };
 
   return (
@@ -48,6 +77,8 @@ export default function ClassroomAssignmentList(props: PrivateProps) {
               type="text"
               placeholder="Tìm kiếm..."
               className="w-[400px] text-neutral-300"
+              onChange={(e) => setSearchInputValue(e.currentTarget.value)}
+              onKeyDown={(e) => handleSearch(e)}
             />
             {sessionData?.user.id === props.classroomData.teacher.id ? (
               <Button onClick={() => setIsCreateAssignmentDialogOpen(true)}>
@@ -58,15 +89,40 @@ export default function ClassroomAssignmentList(props: PrivateProps) {
             )}
           </div>
         </div>
-        {renderAssignmentList()}
+
+        <div>
+          {props.isAssignmentDataListLoading ? (
+            <div className="flex justify-center">
+              <Loader2Icon className="animate-spin" />
+            </div>
+          ) : (
+            <div className="grid items-center gap-4 lg:grid-cols-4">
+              {!props.isAssignmentDataListLoading &&
+              props.assignmentDataList?.length ? (
+                assignments
+              ) : (
+                <div>Không có bài tập nào</div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
       <CreateAssignmentDialog
-        _refetch={() => {}}
+        _refetch={props._refetchAssignmentListData}
         _setIsOpen={setIsCreateAssignmentDialogOpen}
         isOpen={isCreateAssignmentDialogOpen}
         classroomData={props.classroomData}
-        isLoading={props.isLoading}
+        isLoading={props.isClassroomDataLoading}
       />
+      {selectedAssignment && (
+        <AssignmentDetailDialog
+          isOpen={isDetailAssignmentOpen}
+          _setIsOpen={setIsDetailAssignmentOpen}
+          _refetchAssignment={props._refetchAssignmentListData}
+          assignment={selectedAssignment}
+          classroomData={props.classroomData}
+        />
+      )}
     </>
   );
 }
