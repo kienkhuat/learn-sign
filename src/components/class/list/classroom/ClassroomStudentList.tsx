@@ -31,7 +31,7 @@ export default function ClassroomStudentList(props: PrivateProps) {
     return (
       <div
         key={student.id}
-        className="flex h-full flex-col justify-between rounded-lg p-4 shadow-sm dark:bg-neutral-900 dark:text-neutral-300 dark:shadow-neutral-950"
+        className="flex h-full flex-col justify-between overflow-hidden rounded-lg p-4 shadow-sm dark:bg-neutral-900 dark:text-neutral-300 dark:shadow-neutral-950"
       >
         <div className="mb-4 flex items-center gap-4">
           <Avatar className="h-[48px] w-[48px] hover:cursor-pointer">
