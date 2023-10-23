@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { FileIcon, FileX, Loader2, Loader2Icon, PlusIcon } from "lucide-react";
+import {
+  DownloadIcon,
+  FileIcon,
+  FileX,
+  Loader2,
+  Loader2Icon,
+  PlusIcon,
+} from "lucide-react";
 import { api } from "~/utils/api";
 import {
   Dialog,
@@ -21,6 +28,7 @@ import {
   intervalToDuration,
 } from "date-fns";
 import Link from "next/link";
+import FileSaver from "file-saver";
 
 type PrivateProps = {
   isOpen: boolean;
@@ -107,13 +115,26 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
           download={attachmentAsObject.url}
           target="_blank"
           key={index}
-          className="overflow-hidden rounded-lg p-4 dark:bg-neutral-950"
+          className=" rounded-lg p-4 dark:bg-neutral-950 dark:hover:bg-neutral-800"
         >
           <div className="flex items-center gap-2 truncate">
             <div>
               <FileIcon />
             </div>
             <div>{attachmentAsObject.name}</div>
+            <div>
+              <DownloadIcon
+                className="dark:hover:text-neutral-100"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  FileSaver.saveAs(
+                    attachmentAsObject.url,
+                    attachmentAsObject.name,
+                  );
+                }}
+              />
+            </div>
           </div>
         </Link>
       );
@@ -133,7 +154,7 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
   return (
     <>
       <Dialog open={props.isOpen} onOpenChange={props._setIsOpen}>
-        <DialogContent className="p-0 dark:bg-neutral-900 dark:text-white sm:min-w-[800px]">
+        <DialogContent className=" p-0 dark:bg-neutral-900 dark:text-white sm:min-w-[800px]">
           {props.assignment ? (
             <>
               <DialogHeader className="overflow-hidden p-5 pb-0">
@@ -168,12 +189,10 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
                           )} (Đã quá hạn ${deadlineText})`}
                     </div>
                   </div>
+                  <div className="dark:text-neutral-300">Tệp đính kèm:</div>
                   {props.assignment.attachments.length ? (
-                    <div className="flex flex-col gap-2">
-                      <div className="dark:text-neutral-300">Tệp đính kèm:</div>
-                      <div className="flex gap-2 overflow-x-scroll">
-                        {renderAttachments}
-                      </div>
+                    <div className="flex flex-col gap-2 overflow-x-scroll">
+                      <div className="flex gap-2">{renderAttachments}</div>
                     </div>
                   ) : (
                     <></>

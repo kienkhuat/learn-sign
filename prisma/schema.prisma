@@ -40,6 +40,16 @@ model Classroom {
     coverImage  String
     teacher     User         @relation("TeacherClassroom", fields: [teacherId], references: [id], onDelete: Cascade)
     assignments Assignment[]
+    resources   Resources[]
+}
+
+model Resources {
+    id          String    @id @default(cuid())
+    name        String
+    description String    @db.Text
+    attachment  Json
+    classroomId String
+    classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
 }
 
 model Assignment {
@@ -65,6 +75,7 @@ model Submission {
     teacherComment String
     attachments    Json[]
     studentId      String
+    createdAt      DateTime   @default(now())
     student        User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
 

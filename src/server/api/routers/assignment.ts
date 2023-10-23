@@ -57,6 +57,14 @@ export const assignmentRouter = createTRPCRouter({
       });
     }),
 
+  deleteAssignment: protectedProcedure
+    .input(
+      z.object({
+        assignmentId: z.string(),
+      }),
+    )
+    .mutation(({ ctx }) => {}),
+
   findClassroomAssignments: protectedProcedure
     .input(
       z.object({
