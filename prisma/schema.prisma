@@ -70,9 +70,9 @@ model Submission {
     id             String     @id @default(cuid())
     assignmentId   String
     assignment     Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
-    grade          Int
-    comment        String
-    teacherComment String
+    grade          Int?
+    comment        String?
+    teacherComment String?
     attachments    Json[]
     studentId      String
     createdAt      DateTime   @default(now())
