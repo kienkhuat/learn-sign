@@ -34,7 +34,6 @@ import {
   UploadDropzone,
   useUploadThing,
 } from "~/utils/uploadthing";
-import { AssignmentUploadDropzone } from "../AssignmentUploadDropzone";
 import { classroomDataType } from "~/types/types";
 import { UploadDropzoneWithPreview } from "~/components/UploadDropzoneWithPreview";
 
