@@ -36,6 +36,7 @@ import {
 } from "~/utils/uploadthing";
 import { AssignmentUploadDropzone } from "../AssignmentUploadDropzone";
 import { classroomDataType } from "~/types/types";
+import { UploadDropzoneWithPreview } from "~/components/UploadDropzoneWithPreview";
 
 type PrivateProps = {
   isOpen: boolean;
@@ -108,31 +109,6 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
     },
   );
 
-  const removeFileToUpload = (index: number) => {
-    const updatedFiles = files.filter((file, i) => i !== index);
-    setFiles(updatedFiles);
-  };
-
-  const renderFilePreview = files.map((file, index) => {
-    return (
-      <div
-        key={index}
-        className="relative flex items-center gap-2 rounded-lg p-4 py-5 dark:bg-stone-950"
-      >
-        <div
-          onClick={() => removeFileToUpload(index)}
-          className="absolute right-2 top-2 cursor-pointer hover:dark:text-neutral-100"
-        >
-          <XIcon className="h-[18px] w-[18px]" />
-        </div>
-        <div>
-          {file.type.slice(0, 5) === "image" ? <ImageIcon /> : <FileTextIcon />}
-        </div>
-        <div>{file.name}</div>
-      </div>
-    );
-  });
-
   const closeDialog = () => {
     setFiles([]);
     setDeadlineDate(undefined);
@@ -202,15 +178,12 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
               </Popover>
 
               <Label htmlFor="deadline">Tệp đính kèm:</Label>
-              <AssignmentUploadDropzone
-                _startUpload={startUpload}
-                permittedFileInfo={permittedFileInfo}
-                files={files}
+              <UploadDropzoneWithPreview
                 _setFiles={setFiles}
+                files={files}
+                permittedFileInfo={permittedFileInfo}
+                showPreview={true}
               />
-              <div className="flex gap-2 overflow-x-scroll">
-                {renderFilePreview}
-              </div>
             </div>
             <div className="mr-7 flex justify-end gap-2">
               <Button
