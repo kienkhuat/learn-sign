@@ -59,6 +59,13 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
     userId: sessionData!.user.id,
   });
 
+  const { mutateAsync: deleteAssignment, isLoading: isDeletingAssignment } =
+    api.assignment.deleteAssignment.useMutation({
+      onSuccess(data, variables, context) {
+        props._refetchAssignment();
+      },
+    });
+
   const [isSubmissionBeforeDeadline, setIsSubmissionBeforeDeadline] =
     useState<boolean>(
       studentSubmissions &&
@@ -170,6 +177,13 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
   const isTeacherOrAdmin =
     sessionData?.user.role === "teacher" || sessionData?.user.role === "admin";
 
+  const handleDeleteAssignment = async () => {
+    await deleteAssignment({
+      assignmentId: props.assignment.id,
+    });
+    props._setIsOpen(false);
+  };
+
   return (
     <>
       <Dialog open={props.isOpen} onOpenChange={props._setIsOpen}>
@@ -253,10 +267,15 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
                     {sessionData?.user.id === props.assignment.teacherId ? (
                       <div>
                         <Button
-                          onClick={() => {}}
+                          onClick={() => handleDeleteAssignment()}
                           className="mr-2 dark:bg-red-800 dark:text-white"
+                          disabled={isDeletingAssignment}
                         >
-                          {false ? <Loader2 className="animate-spin" /> : "Xóa"}
+                          {isDeletingAssignment ? (
+                            <Loader2 className="animate-spin" />
+                          ) : (
+                            "Xóa"
+                          )}
                         </Button>
                       </div>
                     ) : (

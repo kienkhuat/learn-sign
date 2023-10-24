@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { utapi } from "~/server/uploadthing";
 
 export const assignmentRouter = createTRPCRouter({
   createAssignment: protectedProcedure
@@ -63,7 +64,57 @@ export const assignmentRouter = createTRPCRouter({
         assignmentId: z.string(),
       }),
     )
-    .mutation(({ ctx }) => {}),
+    .mutation(async ({ ctx, input }) => {
+      const foundAssignment = await ctx.db.assignment.findUnique({
+        where: {
+          id: input.assignmentId,
+        },
+        include: {
+          submissions: true,
+        },
+      });
+
+      if (!foundAssignment) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Assignment not found",
+        });
+      }
+
+      let imagesToDelete: string[] = [];
+
+      foundAssignment.attachments.map((attachment) => {
+        const attachmentAsObject = attachment as {
+          key: string;
+          name: string;
+          url: string;
+        };
+        imagesToDelete.push(attachmentAsObject.key);
+      });
+
+      foundAssignment.submissions.map((submission) => {
+        submission.attachments.map((attachment) => {
+          const attachmentAsObject = attachment as {
+            key: string;
+            name: string;
+            url: string;
+          };
+          imagesToDelete.push(attachmentAsObject.key);
+        });
+      });
+
+      console.log(imagesToDelete);
+
+      if (imagesToDelete.length) {
+        await utapi.deleteFiles([...imagesToDelete]);
+      }
+
+      return ctx.db.assignment.delete({
+        where: {
+          id: input.assignmentId,
+        },
+      });
+    }),
 
   findClassroomAssignments: protectedProcedure
     .input(
