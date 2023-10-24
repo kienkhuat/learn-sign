@@ -187,10 +187,7 @@ export default function StudentSubmissionView(props: PrivateProps) {
   const renderSubmissionCard = () => {
     if (props.studentSubmissions)
       return (
-        <div
-          className="flex flex-col gap-2"
-          onClick={() => console.log(props.studentSubmissions)}
-        >
+        <div className="flex flex-col gap-2">
           <div className="dark:text-neutral-300">Bài nộp:</div>
           <div className="flex flex-col gap-2 rounded-lg p-4 dark:bg-neutral-950 ">
             <div className="flex flex-col gap-2">

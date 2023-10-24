@@ -26,12 +26,7 @@ export default function ClassDetailSideMenu(props: PrivateProps) {
   const tabParams = searchParams.get("tab");
 
   return (
-    <div
-      className="flex dark:bg-neutral-800 "
-      onClick={() => {
-        // console.log(props.classroomData);
-      }}
-    >
+    <div className="flex dark:bg-neutral-800 ">
       <div className="h-[100%] w-[284px] p-5">
         <div className="flex h-[100%] flex-col justify-between rounded-3xl shadow-md dark:bg-neutral-900  dark:text-neutral-300 dark:shadow-neutral-950">
           <div>

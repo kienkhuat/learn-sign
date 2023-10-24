@@ -43,7 +43,6 @@ export default function CreateClassDialog(props: PrivateProps) {
       coverImage:
         base64Images[Math.floor(Math.random() * base64Images.length)] || "",
     };
-    console.log(createClassData);
     await apiCreateClassroom({
       ...createClassData,
     });

@@ -57,7 +57,6 @@ export default function ClassroomAssignmentCard(props: PrivateProps) {
         ),
       );
     }
-    console.log(studentSubmission);
   }, [sessionData, props.assignment, router]);
 
   useEffect(() => {

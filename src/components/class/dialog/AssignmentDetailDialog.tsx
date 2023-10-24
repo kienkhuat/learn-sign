@@ -177,10 +177,7 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
           {props.assignment ? (
             <>
               <DialogHeader className="overflow-hidden p-5 pb-0">
-                <DialogTitle
-                  className="truncate text-2xl font-bold"
-                  onClick={() => console.log(props.assignment)}
-                >
+                <DialogTitle className="truncate text-2xl font-bold">
                   {`Bài tập: ${props.assignment.name}`}
                 </DialogTitle>
               </DialogHeader>

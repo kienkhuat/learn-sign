@@ -42,7 +42,6 @@ export default function AddWordDialog(props: PrivateProps) {
       thumbnailLink,
       definition,
     };
-    console.log(createWordData);
     await apiCreateWord({
       ...createWordData,
     });
