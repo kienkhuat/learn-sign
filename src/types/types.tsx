@@ -60,6 +60,7 @@ export type assignmentDataListType =
         teacherComment: string;
         attachments: Prisma.JsonValue[];
         studentId: string;
+        createdAt: Date;
       }[];
     } & {
       id: string;
@@ -97,6 +98,7 @@ export type assignmentDataType = {
     teacherComment: string;
     attachments: Prisma.JsonValue[];
     studentId: string;
+    createdAt: Date;
   }[];
 } & {
   id: string;
@@ -108,3 +110,35 @@ export type assignmentDataType = {
   attachments: Prisma.JsonValue[];
   teacherId: string;
 };
+
+export type studentSubmissionsType =
+  | ({
+      assignment: {
+        id: string;
+        name: string;
+        task: string;
+        classroomId: string;
+        createdAt: Date;
+        deadline: Date;
+        attachments: Prisma.JsonValue[];
+        teacherId: string;
+      };
+      student: {
+        id: string;
+        name: string | null;
+        email: string | null;
+        emailVerified: Date | null;
+        image: string | null;
+        role: string;
+      };
+    } & {
+      id: string;
+      assignmentId: string;
+      grade: number | null;
+      comment: string | null;
+      teacherComment: string | null;
+      attachments: Prisma.JsonValue[];
+      studentId: string;
+      createdAt: Date;
+    })[]
+  | undefined;

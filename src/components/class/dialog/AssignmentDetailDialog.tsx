@@ -26,9 +26,13 @@ import {
   differenceInMilliseconds,
   format,
   intervalToDuration,
+  isBefore,
 } from "date-fns";
 import Link from "next/link";
 import FileSaver from "file-saver";
+import StudentSubmissionView from "../submission/StudentSubmissionView";
+import TeacherSubmissionView from "../submission/TeacherSubmissionView";
+import { useRouter } from "next/router";
 
 type PrivateProps = {
   isOpen: boolean;
@@ -44,51 +48,71 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
   const [deadlineText, setDeadlineText] = useState<String>();
 
   const { data: sessionData } = useSession();
+  const router = useRouter();
+
+  const {
+    data: studentSubmissions,
+    isLoading: isSubmissionLoading,
+    refetch: refetchSubmission,
+  } = api.submission.findUserSubmission.useQuery({
+    assignmentId: props.assignment.id,
+    userId: sessionData!.user.id,
+  });
+
+  const [isSubmissionBeforeDeadline, setIsSubmissionBeforeDeadline] =
+    useState<boolean>(
+      studentSubmissions &&
+        studentSubmissions[0] &&
+        studentSubmissions.length &&
+        isBefore(studentSubmissions[0].createdAt, props.assignment.deadline)
+        ? true
+        : false,
+    );
 
   useEffect(() => {
-    if (
-      intervalToDuration({
-        start: props.assignment.deadline,
-        end: Date.now(),
-      }).days
-    )
-      setDeadlineText(
-        `${
-          intervalToDuration({
-            start: props.assignment.deadline,
-            end: Date.now(),
-          }).days
-        } Ngày`,
-      );
-    else if (
-      intervalToDuration({
-        start: props.assignment.deadline,
-        end: Date.now(),
-      }).hours
-    )
-      setDeadlineText(
-        `${
-          intervalToDuration({
-            start: props.assignment.deadline,
-            end: Date.now(),
-          }).hours
-        } Tiếng`,
-      );
-    else
-      setDeadlineText(
-        `${
-          intervalToDuration({
-            start: props.assignment.deadline,
-            end: Date.now(),
-          }).minutes
-        } Phút`,
-      );
+    setIsSubmissionBeforeDeadline(
+      studentSubmissions &&
+        studentSubmissions[0] &&
+        studentSubmissions.length &&
+        isBefore(studentSubmissions[0].createdAt, props.assignment.deadline)
+        ? true
+        : false,
+    );
+  }, [props.assignment, studentSubmissions, router]);
 
-    if (props.assignment.submissions.length) {
+  useEffect(() => {
+    //Set Deadline Text
+    const durationFromNow = intervalToDuration({
+      start: props.assignment.deadline,
+      end: Date.now(),
+    });
+
+    const durationFromCreatedDate =
+      studentSubmissions &&
+      studentSubmissions[0] &&
+      studentSubmissions.length &&
+      intervalToDuration({
+        start: studentSubmissions[0].createdAt,
+        end: props.assignment.deadline,
+      });
+
+    if (isSubmissionBeforeDeadline && durationFromCreatedDate) {
+      if (durationFromCreatedDate.days)
+        setDeadlineText(`${durationFromCreatedDate.days} Ngày`);
+      else if (durationFromCreatedDate.hours)
+        setDeadlineText(`${durationFromCreatedDate.hours} Tiếng`);
+      else setDeadlineText(`${durationFromCreatedDate.minutes} Phút`);
+    } else {
+      if (durationFromNow.days) setDeadlineText(`${durationFromNow.days} Ngày`);
+      else if (durationFromNow.hours)
+        setDeadlineText(`${durationFromNow.hours} Tiếng`);
+      else setDeadlineText(`${durationFromNow.minutes} Phút`);
+    }
+
+    if (isSubmissionBeforeDeadline) {
       setStatusColor("bg-green-600");
       setStatusTextColor("text-green-600");
-    }
-    if (!props.assignment.submissions.length) {
+    } else {
       if (differenceInMilliseconds(props.assignment.deadline, Date.now()) < 0) {
         setStatusColor("bg-red-600");
         setStatusTextColor("text-red-600");
@@ -100,7 +124,7 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
         setStatusTextColor("text-neutral-400");
       }
     }
-  }, [props.assignment]);
+  }, [props.assignment, studentSubmissions, isSubmissionBeforeDeadline]);
 
   const renderAttachments = props.assignment.attachments.length ? (
     props.assignment.attachments.map((attachment, index) => {
@@ -143,13 +167,8 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
     <></>
   );
 
-  // const renderSubmissions = props.assignment.submissions.map(submission => {
-  //   return (
-  //     <div>
-  //       <div>{submission.}</div>
-  //     </div>
-  //   )
-  // })
+  const isTeacherOrAdmin =
+    sessionData?.user.role === "teacher" || sessionData?.user.role === "admin";
 
   return (
     <>
@@ -174,21 +193,33 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
 
                   <div className="flex gap-1">
                     <div className="dark:text-neutral-300">Hạn:</div>
-                    <div className={`${statusTextColor}`}>
-                      {differenceInMilliseconds(
-                        props.assignment.deadline,
-                        Date.now(),
-                      ) >= 0
-                        ? `${format(
+                    <div
+                      className={`${isTeacherOrAdmin ? "" : statusTextColor}`}
+                    >
+                      {isTeacherOrAdmin ? (
+                        format(props.assignment.deadline, "dd/MM/yyyy")
+                      ) : (
+                        <div>
+                          {`${format(
                             props.assignment.deadline,
                             "dd/MM/yyyy",
-                          )} (Còn ${deadlineText})`
-                        : `${format(
-                            props.assignment.deadline,
-                            "dd/MM/yyyy",
-                          )} (Đã quá hạn ${deadlineText})`}
+                          )} (${
+                            props.assignment.submissions.length
+                              ? isSubmissionBeforeDeadline
+                                ? `Nộp sớm ${deadlineText}`
+                                : `Nộp muộn ${deadlineText}`
+                              : differenceInMilliseconds(
+                                  props.assignment.deadline,
+                                  Date.now(),
+                                ) >= 0
+                              ? `Còn ${deadlineText}`
+                              : `Đã quá hạn ${deadlineText}`
+                          })`}
+                        </div>
+                      )}
                     </div>
                   </div>
+
                   <div className="dark:text-neutral-300">Tệp đính kèm:</div>
                   {props.assignment.attachments.length ? (
                     <div className="flex flex-col gap-2 overflow-x-scroll">
@@ -197,7 +228,28 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
                   ) : (
                     <></>
                   )}
+
+                  {sessionData ? (
+                    <div>
+                      {sessionData.user.role === "student" ? (
+                        <StudentSubmissionView
+                          sessionData={sessionData}
+                          assignment={props.assignment}
+                          classroomData={props.classroomData}
+                          studentSubmissions={studentSubmissions}
+                          isSubmissionLoading={isSubmissionLoading}
+                          _refetchSubmission={refetchSubmission}
+                          _refetchAssignment={props._refetchAssignment}
+                        />
+                      ) : (
+                        <TeacherSubmissionView />
+                      )}
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
+
                 <div className="flex justify-between">
                   <div></div>
                   <div className="flex pr-4">
