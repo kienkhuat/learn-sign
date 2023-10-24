@@ -1,11 +1,11 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { utapi } from "~/server/uploadthing";
 
 export const submissionRouter = createTRPCRouter({
   createSubmission: protectedProcedure
@@ -96,6 +96,44 @@ export const submissionRouter = createTRPCRouter({
         include: {
           assignment: true,
           student: true,
+        },
+      });
+    }),
+
+  deleteSubmission: protectedProcedure
+    .input(
+      z.object({
+        submissionId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const foundSubmission = await ctx.db.submission.findUnique({
+        where: {
+          id: input.submissionId,
+        },
+      });
+
+      if (!foundSubmission) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Submission not found",
+        });
+      }
+
+      await utapi.deleteFiles([
+        ...foundSubmission.attachments.map((attachment) => {
+          const attachmentAsObject = attachment as {
+            key: string;
+            name: string;
+            url: string;
+          };
+          return attachmentAsObject.key;
+        }),
+      ]);
+
+      return ctx.db.submission.delete({
+        where: {
+          id: input.submissionId,
         },
       });
     }),

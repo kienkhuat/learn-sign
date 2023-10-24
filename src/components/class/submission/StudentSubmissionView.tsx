@@ -39,6 +39,14 @@ export default function StudentSubmissionView(props: PrivateProps) {
       },
     });
 
+  const { mutateAsync: deleteSubmission, isLoading: isDeletingSubmission } =
+    api.submission.deleteSubmission.useMutation({
+      onSuccess(data, variables, context) {
+        props._refetchSubmission();
+        props._refetchAssignment();
+      },
+    });
+
   const { startUpload, permittedFileInfo, isUploading } = useUploadThing(
     "Submission",
     {
@@ -75,6 +83,7 @@ export default function StudentSubmissionView(props: PrivateProps) {
         console.log("res is empty");
       }
     });
+    setFiles([]);
   };
 
   const renderAddSubmission = () => {
@@ -122,7 +131,7 @@ export default function StudentSubmissionView(props: PrivateProps) {
   const renderAttachments =
     props.studentSubmissions &&
     props.studentSubmissions[0]?.attachments.length ? (
-      props.assignment.attachments.map((attachment, index) => {
+      props.studentSubmissions[0]?.attachments.map((attachment, index) => {
         const attachmentAsObject = attachment as {
           key: string;
           name: string;
@@ -161,6 +170,19 @@ export default function StudentSubmissionView(props: PrivateProps) {
     ) : (
       <></>
     );
+
+  const handleDeleteSubmission = async () => {
+    if (
+      !props.studentSubmissions ||
+      !props.studentSubmissions[0] ||
+      !props.studentSubmissions.length
+    ) {
+      return;
+    }
+    await deleteSubmission({
+      submissionId: props.studentSubmissions[0].id,
+    });
+  };
 
   const renderSubmissionCard = () => {
     if (props.studentSubmissions)
@@ -221,8 +243,14 @@ export default function StudentSubmissionView(props: PrivateProps) {
                 <Button
                   size={"sm"}
                   className="dark:bg-red-800 dark:text-white dark:hover:bg-red-400"
+                  onClick={() => handleDeleteSubmission()}
+                  disabled={isDeletingSubmission}
                 >
-                  Xóa
+                  {isDeletingSubmission ? (
+                    <Loader2Icon className="animate-spin" />
+                  ) : (
+                    "Xóa"
+                  )}
                 </Button>
                 <Button size={"sm"} className="dark:bg-neutral-300">
                   Sửa
