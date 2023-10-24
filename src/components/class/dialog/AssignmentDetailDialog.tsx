@@ -215,7 +215,9 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
                             props.assignment.deadline,
                             "dd/MM/yyyy",
                           )} (${
-                            props.assignment.submissions.length
+                            studentSubmissions &&
+                            studentSubmissions.length &&
+                            studentSubmissions[0]
                               ? isSubmissionBeforeDeadline
                                 ? `Nộp sớm ${deadlineText}`
                                 : `Nộp muộn ${deadlineText}`
@@ -253,7 +255,15 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
                           _refetchAssignment={props._refetchAssignment}
                         />
                       ) : (
-                        <TeacherSubmissionView />
+                        <TeacherSubmissionView
+                          sessionData={sessionData}
+                          assignment={props.assignment}
+                          classroomData={props.classroomData}
+                          studentSubmissions={studentSubmissions}
+                          isSubmissionLoading={isSubmissionLoading}
+                          _refetchSubmission={refetchSubmission}
+                          _refetchAssignment={props._refetchAssignment}
+                        />
                       )}
                     </div>
                   ) : (

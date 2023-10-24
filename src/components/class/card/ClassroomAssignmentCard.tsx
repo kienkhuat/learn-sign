@@ -153,7 +153,7 @@ export default function ClassroomAssignmentCard(props: PrivateProps) {
               format(props.assignment.deadline, "dd/MM/yyyy")
             ) : (
               <div>
-                {props.assignment.submissions.length
+                {studentSubmission
                   ? isSubmissionBeforeDeadline
                     ? `Nộp sớm ${deadlineText}`
                     : `Nộp muộn ${deadlineText}`
