@@ -140,6 +140,7 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
                 onChange={(e) => setTask(e.currentTarget.value)}
                 placeholder="Nhập yêu cầu bài tập..."
                 required
+                className="whitespace-pre-line"
               />
 
               <Label htmlFor="deadline">Ngày hạn:</Label>

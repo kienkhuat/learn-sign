@@ -199,7 +199,7 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
                 <div className="grid max-h-[800px] w-[99%] items-center gap-2.5 overflow-y-scroll text-lg">
                   <div className="flex gap-1 text-xl">
                     <div className="dark:text-neutral-300">Yêu cầu:</div>
-                    <div>{`${props.assignment.task}`}</div>
+                    <div className="whitespace-pre-line">{`${props.assignment.task}`}</div>
                   </div>
 
                   <div className="flex gap-1">
