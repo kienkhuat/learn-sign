@@ -96,6 +96,7 @@ export default function StudentSubmissionView(props: PrivateProps) {
             <Textarea
               placeholder="Nhập bình luận..."
               onChange={(e) => setCommentInput(e.currentTarget.value)}
+              className="whitespace-pre-line"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -207,7 +208,7 @@ export default function StudentSubmissionView(props: PrivateProps) {
                 <div className="dark:text-neutral-300">
                   Đánh giá của giáo viên:
                 </div>
-                <div>
+                <div className="whitespace-pre-line">
                   {props.studentSubmissions[0]?.teacherComment
                     ? `${props.studentSubmissions[0].teacherComment}`
                     : "Chưa có bình luận của giáo viên"}
@@ -217,7 +218,7 @@ export default function StudentSubmissionView(props: PrivateProps) {
                 <div className="dark:text-neutral-300">
                   Bình luận của học sinh:
                 </div>
-                <div>
+                <div className="whitespace-pre-line">
                   {props.studentSubmissions[0]?.comment
                     ? `${props.studentSubmissions[0].comment}`
                     : "Chưa có bình luận của học sinh"}
