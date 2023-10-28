@@ -27,9 +27,17 @@ type PrivateProps = {
   isSubmissionLoading: boolean;
 };
 
+type commentClamp = string[];
+
 export default function StudentSubmissionView(props: PrivateProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [commentInput, setCommentInput] = useState<string>();
+  const [studentCommentClamp, setStudentCommentClamp] = useState<commentClamp>(
+    [],
+  );
+  const [teacherCommentClamp, setTeacherCommentClamp] = useState<commentClamp>(
+    [],
+  );
 
   const { mutateAsync: addSubmission, isLoading: isAddingSubmission } =
     api.submission.createSubmission.useMutation({
@@ -185,8 +193,112 @@ export default function StudentSubmissionView(props: PrivateProps) {
     });
   };
 
+  const handleSeeMore = (submissionId: string, commentType: string) => {
+    if (commentType === "student") {
+      if (studentCommentClamp.find((id) => id === submissionId)) {
+        const newStudentCommentClamp = studentCommentClamp.filter(
+          (id) => id !== submissionId,
+        );
+        console.log(newStudentCommentClamp);
+        setStudentCommentClamp([...newStudentCommentClamp]);
+      } else {
+        setStudentCommentClamp([...studentCommentClamp, submissionId]);
+      }
+    } else {
+    }
+  };
+
+  const renderComments = (
+    submissionId: string,
+    comment: string | null,
+    type: string,
+  ) => {
+    const labelText =
+      type === "student"
+        ? "Bình luận của học sinh:"
+        : "Đánh giá của giáo viên:";
+    const commentEmptyText =
+      type === "student"
+        ? "Chưa có bình luận của học sinh:"
+        : "Chưa có đánh giá của giáo viên:";
+
+    const commentLine = comment?.split("\n").length || 0;
+    const commentLength = comment?.length || 0;
+    const isStudentCommentClamp = studentCommentClamp.find(
+      (id) => id === submissionId,
+    )
+      ? false
+      : true;
+    const isTeacherCommentClamp = teacherCommentClamp.find(
+      (id) => id === submissionId,
+    )
+      ? true
+      : false;
+
+    const isClamp =
+      type === "student" ? isStudentCommentClamp : isTeacherCommentClamp;
+
+    return (
+      <div className="flex gap-2">
+        <div className="whitespace-nowrap dark:text-neutral-300">
+          {labelText}
+        </div>
+        <div>
+          {comment ? (
+            <div>
+              <div
+                className={`${
+                  isClamp ? "line-clamp-3" : ""
+                } whitespace-pre-line break-all`}
+              >
+                {comment}
+              </div>
+              {commentLine > 3 || commentLength > 190 ? (
+                <>
+                  {isClamp ? (
+                    <div className="mb-2 flex">
+                      <div
+                        className="cursor-pointer rounded-lg px-1 text-sm dark:bg-neutral-700 hover:dark:bg-neutral-600"
+                        onClick={() =>
+                          handleSeeMore(
+                            submissionId,
+                            `${type === "student" ? "student" : "teacher"}`,
+                          )
+                        }
+                      >
+                        Xem thêm
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mb-2 flex">
+                      <div
+                        className="cursor-pointer rounded-lg px-1 text-sm dark:bg-neutral-700 hover:dark:bg-neutral-600"
+                        onClick={() =>
+                          handleSeeMore(
+                            submissionId,
+                            `${type === "student" ? "student" : "teacher"}`,
+                          )
+                        }
+                      >
+                        Thu gọn
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
+            </div>
+          ) : (
+            <div>{commentEmptyText}</div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const renderSubmissionCard = () => {
-    if (props.studentSubmissions)
+    if (props.studentSubmissions && props.studentSubmissions[0])
       return (
         <div className="flex flex-col gap-2">
           <div className="dark:text-neutral-300">Bài nộp:</div>
@@ -204,25 +316,19 @@ export default function StudentSubmissionView(props: PrivateProps) {
                     : "Chưa chấm điểm"}
                 </div>
               </div>
-              <div className="flex gap-2">
-                <div className="dark:text-neutral-300">
-                  Đánh giá của giáo viên:
-                </div>
-                <div className="whitespace-pre-line">
-                  {props.studentSubmissions[0]?.teacherComment
-                    ? `${props.studentSubmissions[0].teacherComment}`
-                    : "Chưa có bình luận của giáo viên"}
-                </div>
+              <div>
+                {renderComments(
+                  props.studentSubmissions[0].id,
+                  props.studentSubmissions[0].teacherComment,
+                  "teacher",
+                )}
               </div>
-              <div className="flex gap-2">
-                <div className="dark:text-neutral-300">
-                  Bình luận của học sinh:
-                </div>
-                <div className="whitespace-pre-line">
-                  {props.studentSubmissions[0]?.comment
-                    ? `${props.studentSubmissions[0].comment}`
-                    : "Chưa có bình luận của học sinh"}
-                </div>
+              <div>
+                {renderComments(
+                  props.studentSubmissions[0].id,
+                  props.studentSubmissions[0].comment,
+                  "student",
+                )}
               </div>
               <div className="flex gap-2">
                 <div className="w-auto whitespace-nowrap dark:text-neutral-300">

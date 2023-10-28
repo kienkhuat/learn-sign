@@ -81,6 +81,10 @@ export const submissionRouter = createTRPCRouter({
           where: {
             assignmentId: input.assignmentId,
           },
+          include: {
+            assignment: true,
+            student: true,
+          },
         });
       }
       return ctx.db.submission.findMany({
@@ -96,6 +100,26 @@ export const submissionRouter = createTRPCRouter({
         include: {
           assignment: true,
           student: true,
+        },
+      });
+    }),
+
+  gradeSubmission: protectedProcedure
+    .input(
+      z.object({
+        submissionId: z.string(),
+        gradeInput: z.number(),
+        teacherCommentInput: z.string().optional(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.submission.update({
+        where: {
+          id: input.submissionId,
+        },
+        data: {
+          grade: input.gradeInput,
+          teacherComment: input.teacherCommentInput,
         },
       });
     }),
