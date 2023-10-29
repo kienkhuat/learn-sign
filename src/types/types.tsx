@@ -93,9 +93,9 @@ export type assignmentDataType = {
   submissions: {
     id: string;
     assignmentId: string;
-    grade: number;
-    comment: string;
-    teacherComment: string;
+    grade: number | null;
+    comment: string | null;
+    teacherComment: string | null;
     attachments: Prisma.JsonValue[];
     studentId: string;
     createdAt: Date;
