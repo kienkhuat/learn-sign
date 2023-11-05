@@ -46,9 +46,12 @@ model Classroom {
 model Resources {
     id          String    @id @default(cuid())
     name        String
-    description String    @db.Text
-    attachment  Json
+    imageCover  Json
+    contents    Json[]
+    description String?   @db.Text
+    attachments Json[]
     classroomId String
+    createdAt   DateTime  @default(now())
     classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
 }
 
