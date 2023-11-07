@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import React, { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type PrivateProps = {
   // pathname: string;
@@ -19,6 +20,8 @@ export default function ClassSideMenu(props: PrivateProps) {
 
   const searchParams = useSearchParams();
   const tabParams = searchParams.get("tab");
+
+  const { data: sessionData } = useSession();
 
   return (
     <div className="flex dark:bg-neutral-800 ">
@@ -51,16 +54,20 @@ export default function ClassSideMenu(props: PrivateProps) {
               <div>Lớp học</div>
             </div>
           </Link>
-          <Link href="/class?tab=students" className="flex flex-col px-4 py-1">
-            <div
-              className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
-                tabParams === "students" ? "bg-neutral-800 font-bold" : ""
-              }`}
-            >
-              <UsersIcon />
-              <div>Học Sinh</div>
-            </div>
-          </Link>
+          {sessionData?.user.role === "admin" ? (
+            <Link href="/class?tab=user" className="flex flex-col px-4 py-1">
+              <div
+                className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
+                  tabParams === "user" ? "bg-neutral-800 font-bold" : ""
+                }`}
+              >
+                <UsersIcon />
+                <div>Người dùng</div>
+              </div>
+            </Link>
+          ) : (
+            <></>
+          )}
           {/* <Link href="/class?tab=chat" className="flex flex-col px-4 py-1">
             <div
               className={`flex cursor-pointer gap-3 rounded-lg p-3 ${

@@ -40,7 +40,7 @@ export default function Home() {
         return <ClassDashboardScreen />;
       case "classrooms":
         return <ClassListScreen />;
-      case "students":
+      case "user":
         return <ClassStudentScreen />;
       case "chat":
         return <ClassListScreen />;

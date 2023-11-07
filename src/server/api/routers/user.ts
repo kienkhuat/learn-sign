@@ -21,6 +21,24 @@ export const userRouter = createTRPCRouter({
     });
   }),
 
+  setUserRole: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        inputRole: z.string(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.user.update({
+        where: {
+          id: input.userId,
+        },
+        data: {
+          role: input.inputRole,
+        },
+      });
+    }),
+
   findAllOrSearchStudents: protectedProcedure
     .input(
       z.object({
