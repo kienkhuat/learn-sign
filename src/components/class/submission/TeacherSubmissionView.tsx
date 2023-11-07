@@ -258,42 +258,43 @@ export default function TeacherSubmissionView(props: PrivateProps) {
               submission.grade ? "bg-green-600" : "bg-neutral-500"
             } `}
           ></div>
-          <div className="w-full px-4 py-2">
-            <div className="flex gap-2">
-              <div className="dark:text-neutral-300">Tên học sinh:</div>
-              <div>{submission.student.name}</div>
-            </div>
-            <div className="flex gap-2">
-              <div className="dark:text-neutral-300">Điểm:</div>
+          <div className="flex w-full flex-col justify-between px-4 py-2">
+            <div className="">
+              <div className="flex gap-2">
+                <div className="dark:text-neutral-300">Tên học sinh:</div>
+                <div>{submission.student.name}</div>
+              </div>
+              <div className="flex gap-2">
+                <div className="dark:text-neutral-300">Điểm:</div>
+                <div>
+                  {submission.grade ? `${submission.grade}/10` : "Chưa có điểm"}
+                </div>
+              </div>
               <div>
-                {submission.grade ? `${submission.grade}/10` : "Chưa có điểm"}
-              </div>
-            </div>
-            <div>
-              {renderComments(
-                submission.id,
-                submission.teacherComment,
-                "teacher",
-              )}
-            </div>
-            <div>
-              {renderComments(submission.id, submission.comment, "student")}
-            </div>
-
-            <div className="flex gap-2">
-              <div className="dark:text-neutral-300">Tình trạng nộp:</div>
-              <div className={`${submissionStatusColor}`}>
-                {submissionStatus}
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <div className="dark:text-neutral-300">Tệp đính kèm:</div>
-              <div className="flex flex-wrap gap-2">
-                {submission.attachments && submission.attachments.length ? (
-                  renderAttachments(submission.attachments)
-                ) : (
-                  <></>
+                {renderComments(
+                  submission.id,
+                  submission.teacherComment,
+                  "teacher",
                 )}
+              </div>
+              <div>
+                {renderComments(submission.id, submission.comment, "student")}
+              </div>
+              <div className="flex gap-2">
+                <div className="dark:text-neutral-300">Tình trạng nộp:</div>
+                <div className={`${submissionStatusColor}`}>
+                  {submissionStatus}
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <div className="dark:text-neutral-300">Tệp đính kèm:</div>
+                <div className="flex flex-wrap gap-2">
+                  {submission.attachments && submission.attachments.length ? (
+                    renderAttachments(submission.attachments)
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
             </div>
             <div className="flex justify-between">
@@ -375,7 +376,9 @@ export default function TeacherSubmissionView(props: PrivateProps) {
       );
     });
 
-    return <div className="flex flex-col gap-2">{submissionListToRender}</div>;
+    return (
+      <div className=" grid grid-cols-2 gap-2">{submissionListToRender}</div>
+    );
   };
 
   return (

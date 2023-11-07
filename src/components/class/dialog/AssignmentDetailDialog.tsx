@@ -187,7 +187,7 @@ export default function AssignmentDetailDialog(props: PrivateProps) {
   return (
     <>
       <Dialog open={props.isOpen} onOpenChange={props._setIsOpen}>
-        <DialogContent className=" p-0 dark:bg-neutral-900 dark:text-white sm:min-w-[800px]">
+        <DialogContent className=" p-0 dark:bg-neutral-900 dark:text-white sm:min-w-[80%]">
           {props.assignment ? (
             <>
               <DialogHeader className="overflow-hidden p-5 pb-0">
