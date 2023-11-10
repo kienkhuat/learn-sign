@@ -249,7 +249,7 @@ export default function CreateResourceDialog(props: PrivateProps) {
       };
     });
     const contentsToSend = await Promise.all(unresovedPromises);
-
+    if (!imageCoverFiles || !imageCoverFiles.length) return;
     const uploadedImageCover = await startUploadResourceImage(imageCoverFiles);
     if (!uploadedImageCover) return;
 
