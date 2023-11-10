@@ -77,4 +77,18 @@ export const resourceRouter = createTRPCRouter({
         },
       });
     }),
+
+  deleteResource: protectedProcedure
+    .input(
+      z.object({
+        resourceId: z.string(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.resources.delete({
+        where: {
+          id: input.resourceId,
+        },
+      });
+    }),
 });

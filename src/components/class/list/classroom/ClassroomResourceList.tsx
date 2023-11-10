@@ -117,6 +117,7 @@ export default function ClassroomResourceList(props: PrivateProps) {
           _setIsOpen={setIsDetailDialogOpen}
           isOpen={isDetailDialogOpen}
           resource={selectedResource}
+          _refetchResource={props._refetchResourceList}
         />
       )}
     </>

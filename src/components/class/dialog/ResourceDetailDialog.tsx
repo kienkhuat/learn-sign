@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { DownloadIcon, FileIcon, Loader2, PlusIcon } from "lucide-react";
+import {
+  DownloadIcon,
+  FileIcon,
+  Loader2,
+  Loader2Icon,
+  PlusIcon,
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +18,12 @@ import { useSession } from "next-auth/react";
 import { Prisma } from "@prisma/client";
 import FileSaver from "file-saver";
 import Link from "next/link";
+import { api } from "~/utils/api";
 
 type PrivateProps = {
   isOpen: boolean;
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  // _refetch: (...args: any[]) => any;
+  _refetchResource: (...args: any[]) => any;
   resource: {
     classroom: {
       id: string;
@@ -39,6 +46,13 @@ type PrivateProps = {
 
 export default function ResourceDetailDialog(props: PrivateProps) {
   const { data: sessionData } = useSession();
+
+  const { mutateAsync: deleteResource, isLoading: isDeletingResource } =
+    api.resource.deleteResource.useMutation({
+      onSuccess(data, variables, context) {
+        return props._refetchResource();
+      },
+    });
 
   const renderContent = props.resource.contents?.map((content, index) => {
     const contentAsObject = content as {
@@ -109,6 +123,14 @@ export default function ResourceDetailDialog(props: PrivateProps) {
     <></>
   );
 
+  const handleDeleteResource = async () => {
+    if (sessionData?.user.id !== props.resource.classroom.teacherId) return;
+    await deleteResource({
+      resourceId: props.resource.id,
+    });
+    props._setIsOpen(false);
+  };
+
   return (
     <>
       <Dialog open={props.isOpen} onOpenChange={props._setIsOpen}>
@@ -152,7 +174,22 @@ export default function ResourceDetailDialog(props: PrivateProps) {
                   {renderContent}
                 </div>
               </div>
-              <div className="mr-1 flex justify-end gap-2">
+              <div className="mr-1 flex justify-between gap-2">
+                {sessionData?.user.id === props.resource.classroom.teacherId ? (
+                  <Button
+                    onClick={() => handleDeleteResource()}
+                    disabled={isDeletingResource}
+                    className="dark:bg-red-800 dark:text-white hover:dark:text-neutral-950"
+                  >
+                    {isDeletingResource ? (
+                      <Loader2Icon className="animate-spin" />
+                    ) : (
+                      "Xóa"
+                    )}
+                  </Button>
+                ) : (
+                  <div></div>
+                )}
                 <Button
                   onClick={() => props._setIsOpen(false)}
                   className=" dark:bg-neutral-800 dark:text-white dark:hover:text-black"
