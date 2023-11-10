@@ -10,6 +10,7 @@ import StudentList from "~/components/class/list/classroom/ClassroomStudentList"
 import ClassroomAssignmentScreen from "~/components/class/screen/classroom/ClassroomAssignmentScreen";
 import ClassroomChatroomScreen from "~/components/class/screen/classroom/ClassroomChatroomScreen";
 import ClassroomResourceScreen from "~/components/class/screen/classroom/ClassroomResourceScreen";
+import ClassroomSettingScreen from "~/components/class/screen/classroom/ClassroomSettingScreen";
 import ClassroomStudentListScreen from "~/components/class/screen/classroom/ClassroomStudentListScreen";
 
 import { api } from "~/utils/api";
@@ -40,7 +41,7 @@ export default function Home() {
       !studentInClassroom &&
       classroomData.teacherId !== sessionData.user.id
     ) {
-      router.push("/"); //Todo: redirect to request to join
+      router.push("/class"); //Todo: redirect to request to join
     }
   }, [classroomData, sessionData]);
 
@@ -87,6 +88,18 @@ export default function Home() {
       case "chatroom":
         return (
           <ClassroomChatroomScreen
+            _refetch={refetch}
+            isLoading={isLoading}
+            classroomData={classroomData!}
+          />
+        );
+      case "setting":
+        if (sessionData?.user.id !== classroomData?.teacherId) {
+          router.push("/class");
+          return <></>;
+        }
+        return (
+          <ClassroomSettingScreen
             _refetch={refetch}
             isLoading={isLoading}
             classroomData={classroomData!}

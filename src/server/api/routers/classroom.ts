@@ -284,4 +284,42 @@ export const classroomRouter = createTRPCRouter({
         updatedClassroom,
       };
     }),
+
+  deleteClassroom: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.classroom.delete({
+        where: {
+          id: input.classroomId,
+        },
+      });
+    }),
+
+  editClassName: protectedProcedure
+    .input(
+      z.object({
+        classroomId: z.string(),
+        newClassName: z.string(),
+      }),
+    )
+    .mutation(({ ctx, input }) => {
+      if (!input.newClassName) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Class name to edit cant be empty",
+        });
+      }
+      return ctx.db.classroom.update({
+        where: {
+          id: input.classroomId,
+        },
+        data: {
+          name: input.newClassName,
+        },
+      });
+    }),
 });

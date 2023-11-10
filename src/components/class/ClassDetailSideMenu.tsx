@@ -6,9 +6,11 @@ import {
   LayoutDashboardIcon,
   MessageCircleIcon,
   PenSquareIcon,
+  SettingsIcon,
   ShapesIcon,
   UsersIcon,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
@@ -24,6 +26,8 @@ export default function ClassDetailSideMenu(props: PrivateProps) {
 
   const searchParams = useSearchParams();
   const tabParams = searchParams.get("tab");
+
+  const { data: sessionData } = useSession();
 
   return (
     <div className="flex dark:bg-neutral-800 ">
@@ -102,6 +106,26 @@ export default function ClassDetailSideMenu(props: PrivateProps) {
                 <div>Trao đổi</div>
               </div>
             </Link>
+            {sessionData?.user.id === props.classroomData.teacherId ? (
+              <Link
+                href={{
+                  pathname: "/class/[classId]",
+                  query: { classId: props.classroomData?.id, tab: "setting" },
+                }}
+                className="flex flex-col px-4 py-1"
+              >
+                <div
+                  className={`flex cursor-pointer gap-3 rounded-lg p-3 ${
+                    tabParams === "setting" ? "bg-neutral-800 font-bold" : ""
+                  }`}
+                >
+                  <SettingsIcon />
+                  <div>Cài đặt</div>
+                </div>
+              </Link>
+            ) : (
+              <></>
+            )}
             <div>
               <Link href="/class" className="flex flex-col px-4 py-1">
                 <div className={`flex cursor-pointer gap-3 rounded-lg p-3 `}>
