@@ -8,7 +8,11 @@ import {
 
 export const dictionaryRouter = createTRPCRouter({
   getAllWord: publicProcedure.query(({ ctx }) => {
-    return ctx.db.word.findMany();
+    return ctx.db.word.findMany({
+      orderBy: {
+        word: "asc",
+      },
+    });
   }),
 
   findWord: publicProcedure
