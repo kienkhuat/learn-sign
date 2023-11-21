@@ -25,9 +25,8 @@ export default function AddWordDialog(props: PrivateProps) {
   const [videoLink, setVideoLink] = useState("");
   const [thumbnailLink, setThumbnailLink] = useState("");
   const [definition, setDefinition] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const { mutateAsync: apiCreateWord } =
+  const { mutateAsync: apiCreateWord, isLoading } =
     api.dictionary.createNewWord.useMutation({
       onSuccess(data, variables, context) {
         return props._refetch();
@@ -35,7 +34,7 @@ export default function AddWordDialog(props: PrivateProps) {
     });
 
   const handleCreateWord = async () => {
-    setIsLoading(true);
+    if (!word || !videoLink || !thumbnailLink || !definition) return;
     const createWordData = {
       word,
       videoLink,
@@ -45,7 +44,6 @@ export default function AddWordDialog(props: PrivateProps) {
     await apiCreateWord({
       ...createWordData,
     });
-    setIsLoading(false);
     props._setIsOpen(false);
     setVideoLink("");
     setWord("");
