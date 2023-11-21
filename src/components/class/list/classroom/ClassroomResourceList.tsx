@@ -4,6 +4,7 @@ import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import CreateResourceDialog from "../../dialog/CreateResourceDialog";
 import { Prisma } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 type PrivateProps = {
   classroomId: string;
@@ -58,6 +59,8 @@ export default function ClassroomResourceList(props: PrivateProps) {
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState<boolean>(false);
   const [selectedResource, setSelectedResource] = useState<resourceType>();
 
+  const { data: sessionData } = useSession();
+
   const renderResourceList = props.resourceList?.map((resource, index) => {
     const imageCoverAsObject = resource.imageCover as {
       key: string;
@@ -99,7 +102,11 @@ export default function ClassroomResourceList(props: PrivateProps) {
               placeholder="Tìm kiếm..."
               className="w-[300px] transition-all duration-200 focus:w-[400px]"
             />
-            <Button onClick={() => setIsCreateDialogOpen(true)}>Thêm</Button>
+            {sessionData?.user.role !== "student" ? (
+              <Button onClick={() => setIsCreateDialogOpen(true)}>Thêm</Button>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
         <div className="3xl:grid-cols-5 grid w-full grid-cols-4 gap-4">
