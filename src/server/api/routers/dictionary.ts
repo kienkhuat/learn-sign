@@ -41,6 +41,9 @@ export const dictionaryRouter = createTRPCRouter({
             mode: "insensitive",
           },
         },
+        orderBy: {
+          word: "asc",
+        },
       });
     }),
 
