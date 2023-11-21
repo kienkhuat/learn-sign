@@ -41,6 +41,7 @@ type PrivateProps = {
     attachments: Prisma.JsonValue[];
     classroomId: string;
     createdAt: Date;
+    resourceShare: string;
   };
 };
 
@@ -175,20 +176,43 @@ export default function ResourceDetailDialog(props: PrivateProps) {
                 </div>
               </div>
               <div className="mr-1 flex justify-between gap-2">
-                {sessionData?.user.id === props.resource.classroom.teacherId ? (
-                  <Button
-                    onClick={() => handleDeleteResource()}
-                    disabled={isDeletingResource}
-                    className="dark:bg-red-800 dark:text-white hover:dark:text-neutral-950"
-                  >
-                    {isDeletingResource ? (
-                      <Loader2Icon className="animate-spin" />
+                {props.resource.resourceShare === "shared" ? (
+                  <div>
+                    {sessionData?.user.id ===
+                    props.resource.classroom.teacherId ? (
+                      <Button
+                        onClick={() => handleDeleteResource()}
+                        disabled={isDeletingResource}
+                        className="dark:bg-red-800 dark:text-white hover:dark:text-neutral-950"
+                      >
+                        {isDeletingResource ? (
+                          <Loader2Icon className="animate-spin" />
+                        ) : (
+                          "Xóa"
+                        )}
+                      </Button>
                     ) : (
-                      "Xóa"
+                      <div></div>
                     )}
-                  </Button>
+                  </div>
                 ) : (
-                  <div></div>
+                  <div>
+                    {sessionData?.user.role === "admin" ? (
+                      <Button
+                        onClick={() => handleDeleteResource()}
+                        disabled={isDeletingResource}
+                        className="dark:bg-red-800 dark:text-white hover:dark:text-neutral-950"
+                      >
+                        {isDeletingResource ? (
+                          <Loader2Icon className="animate-spin" />
+                        ) : (
+                          "Xóa"
+                        )}
+                      </Button>
+                    ) : (
+                      <div></div>
+                    )}
+                  </div>
                 )}
                 <Button
                   onClick={() => props._setIsOpen(false)}

@@ -53,6 +53,7 @@ type resourceType = {
   attachments: Prisma.JsonValue[];
   classroomId: string;
   createdAt: Date;
+  resourceShare: string;
 };
 
 export default function ClassroomResourceList(props: PrivateProps) {
