@@ -14,6 +14,8 @@ type PrivateProps = {
 
 export default function ClassroomResourceScreen(props: PrivateProps) {
   const [resourceSearchInput, setResourceSearchInput] = useState<string>();
+  const [sharedResourceSearchInput, setSharedResourceSearchInput] =
+    useState<string>();
 
   const {
     data: resourceList,
@@ -24,6 +26,14 @@ export default function ClassroomResourceScreen(props: PrivateProps) {
     searchInput: resourceSearchInput,
   });
 
+  const {
+    data: sharedResourceList,
+    isLoading: isSharedResourceListLoading,
+    refetch: refetchSharedResourceList,
+  } = api.resource.findSharedResources.useQuery({
+    searchInput: sharedResourceSearchInput,
+  });
+
   return (
     <>
       {!props.isLoading ? (
@@ -32,9 +42,13 @@ export default function ClassroomResourceScreen(props: PrivateProps) {
           <ClassroomResourceList
             classroomId={props.classroomData.id}
             _setResourceSearchInput={setResourceSearchInput}
+            _setSharedResourceSearchInput={setSharedResourceSearchInput}
             _refetchResourceList={refetchResourceList}
+            _refetchSharedResourceList={refetchSharedResourceList}
             isResourceListLoading={isResourceListLoading}
+            isSharedResourceListLoading={isSharedResourceListLoading}
             resourceList={resourceList}
+            sharedResourceList={sharedResourceList}
           />
         </div>
       ) : (

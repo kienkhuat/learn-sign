@@ -24,6 +24,7 @@ type PrivateProps = {
   isOpen: boolean;
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   _refetchResource: (...args: any[]) => any;
+  _refetchSharedResource: (...args: any[]) => any;
   resource: {
     classroom: {
       id: string;
@@ -51,7 +52,9 @@ export default function ResourceDetailDialog(props: PrivateProps) {
   const { mutateAsync: deleteResource, isLoading: isDeletingResource } =
     api.resource.deleteResource.useMutation({
       onSuccess(data, variables, context) {
-        return props._refetchResource();
+        props._refetchResource();
+        props._refetchSharedResource();
+        return;
       },
     });
 
@@ -77,7 +80,7 @@ export default function ResourceDetailDialog(props: PrivateProps) {
       );
     }
     return (
-      <div key={index}>
+      <div key={index} className="text-xl">
         <div className="whitespace-pre-line">{contentAsObject.value}</div>
       </div>
     );
@@ -135,9 +138,11 @@ export default function ResourceDetailDialog(props: PrivateProps) {
   return (
     <>
       <Dialog open={props.isOpen} onOpenChange={props._setIsOpen}>
-        <DialogContent className=" p-0 dark:bg-neutral-900 dark:text-white  sm:min-w-[900px]">
+        <DialogContent className=" p-0 dark:bg-neutral-900 dark:text-white  sm:min-w-[1500px]">
           <DialogHeader className="p-5 pb-0">
-            <DialogTitle>{props.resource.name}</DialogTitle>
+            <DialogTitle className="text-3xl">
+              {props.resource.name}
+            </DialogTitle>
           </DialogHeader>
           <DialogDescription className="flex max-h-[900px] flex-col gap-4 overflow-y-scroll p-5 pr-0 pt-3">
             <div className="grid w-[99%]  items-center gap-2.5">
@@ -146,7 +151,7 @@ export default function ResourceDetailDialog(props: PrivateProps) {
                   <div className="text-2xl font-bold dark:text-neutral-300">
                     Giới thiệu:
                   </div>
-                  <div className="flex flex-col gap-2 text-lg">
+                  <div className="flex flex-col gap-2 text-xl">
                     {props.resource.description}
                   </div>
                 </div>
@@ -167,7 +172,7 @@ export default function ResourceDetailDialog(props: PrivateProps) {
               ) : (
                 <></>
               )}
-              <div className="flex flex-col gap-2">
+              <div className="mb-8 flex flex-col gap-2">
                 <div className="text-2xl font-bold dark:text-neutral-300">
                   Nội dung:
                 </div>

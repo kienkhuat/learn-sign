@@ -23,6 +23,7 @@ type PrivateProps = {
   isOpen: boolean;
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   _refetchResources: (...args: any[]) => any;
+  _refetchSharedResources: (...args: any[]) => any;
   classroomId: string;
   resourceCreateType: string;
 };
@@ -47,7 +48,9 @@ export default function CreateResourceDialog(props: PrivateProps) {
   const { mutateAsync: createResource, isLoading: isCreatingResource } =
     api.resource.createResource.useMutation({
       onSuccess(data, variables, context) {
-        return props._refetchResources();
+        props._refetchResources();
+        props._refetchSharedResources();
+        return;
       },
     });
 

@@ -11,9 +11,36 @@ type PrivateProps = {
   _setResourceSearchInput: React.Dispatch<
     React.SetStateAction<string | undefined>
   >;
+  _setSharedResourceSearchInput: React.Dispatch<
+    React.SetStateAction<string | undefined>
+  >;
   isResourceListLoading: boolean;
+  isSharedResourceListLoading: boolean;
   _refetchResourceList: (...args: any[]) => any;
+  _refetchSharedResourceList: (...args: any[]) => any;
   resourceList:
+    | ({
+        classroom: {
+          id: string;
+          name: string;
+          createdAt: Date;
+          teacherId: string;
+          coverImage: string;
+        };
+      } & {
+        id: string;
+        name: string;
+        imageCover: Prisma.JsonValue;
+        contents: Prisma.JsonValue[];
+        description: string | null;
+        attachments: Prisma.JsonValue[];
+        classroomId: string;
+        createdAt: Date;
+        resourceShare: string;
+      })[]
+    | undefined;
+
+  sharedResourceList:
     | ({
         classroom: {
           id: string;
@@ -65,17 +92,9 @@ export default function ClassroomResourceList(props: PrivateProps) {
 
   const { data: sessionData } = useSession();
 
-  const notSharedResourceList = props.resourceList?.filter((resource) => {
-    return resource.resourceShare === "notShared";
-  });
-
-  const sharedResourceList = props.resourceList?.filter((resource) => {
-    return resource.resourceShare === "shared";
-  });
-
   const renderResourceList = (shared: string) => {
     const resourceListToRender =
-      shared === "shared" ? sharedResourceList : notSharedResourceList;
+      shared === "shared" ? props.sharedResourceList : props.resourceList;
     const listToRender = resourceListToRender?.map((resource, index) => {
       const imageCoverAsObject = resource.imageCover as {
         key: string;
@@ -134,9 +153,9 @@ export default function ClassroomResourceList(props: PrivateProps) {
             )}
           </div>
         </div>
-        {!props.isResourceListLoading &&
-        sharedResourceList &&
-        sharedResourceList.length > 0 ? (
+        {!props.isSharedResourceListLoading &&
+        props.sharedResourceList &&
+        props.sharedResourceList.length > 0 ? (
           <div className="3xl:grid-cols-5 grid w-full grid-cols-4 gap-4">
             {renderResourceList("shared")}
           </div>
@@ -168,8 +187,8 @@ export default function ClassroomResourceList(props: PrivateProps) {
           </div>
         </div>
         {!props.isResourceListLoading &&
-        notSharedResourceList &&
-        notSharedResourceList.length > 0 ? (
+        props.resourceList &&
+        props.resourceList.length > 0 ? (
           <div className="3xl:grid-cols-5 grid w-full grid-cols-4 gap-4">
             {renderResourceList("notShared")}
           </div>
@@ -182,6 +201,7 @@ export default function ClassroomResourceList(props: PrivateProps) {
         isOpen={isCreateDialogOpen}
         classroomId={props.classroomId}
         _refetchResources={props._refetchResourceList}
+        _refetchSharedResources={props._refetchSharedResourceList}
         resourceCreateType={resourceCreateType}
       />
       {selectedResource && (
@@ -190,6 +210,7 @@ export default function ClassroomResourceList(props: PrivateProps) {
           isOpen={isDetailDialogOpen}
           resource={selectedResource}
           _refetchResource={props._refetchResourceList}
+          _refetchSharedResource={props._refetchSharedResourceList}
         />
       )}
     </>

@@ -18,6 +18,28 @@ export const resourceRouter = createTRPCRouter({
       return ctx.db.resources.findMany({
         where: {
           classroomId: input.classroomId,
+          resourceShare: "notShared",
+          name: {
+            contains: input.searchInput,
+            mode: "insensitive",
+          },
+        },
+        include: {
+          classroom: true,
+        },
+      });
+    }),
+
+  findSharedResources: protectedProcedure
+    .input(
+      z.object({
+        searchInput: z.string().optional(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.resources.findMany({
+        where: {
+          resourceShare: "shared",
           name: {
             contains: input.searchInput,
             mode: "insensitive",
