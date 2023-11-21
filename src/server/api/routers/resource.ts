@@ -32,6 +32,7 @@ export const resourceRouter = createTRPCRouter({
   createResource: protectedProcedure
     .input(
       z.object({
+        resourceShare: z.string(),
         classroomId: z.string(),
         contents: z
           .object({
@@ -74,6 +75,7 @@ export const resourceRouter = createTRPCRouter({
           contents: input.contents,
           description: input.description,
           attachments: input.attachments,
+          resourceShare: input.resourceShare,
         },
       });
     }),

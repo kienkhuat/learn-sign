@@ -16,12 +16,15 @@ import { ResourceUploadDropzone } from "~/components/ResourceUploadDropzone";
 import { useUploadThing } from "~/utils/uploadthing";
 import { UploadDropzoneWithPreview } from "~/components/UploadDropzoneWithPreview";
 import { api } from "~/utils/api";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Label } from "~/components/ui/label";
 
 type PrivateProps = {
   isOpen: boolean;
   _setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   _refetchResources: (...args: any[]) => any;
   classroomId: string;
+  resourceCreateType: string;
 };
 
 type InputType = {
@@ -263,6 +266,7 @@ export default function CreateResourceDialog(props: PrivateProps) {
       attachments: uploadedAttachments,
       name: resourceName,
       description: resourceDescription,
+      resourceShare: props.resourceCreateType,
     });
 
     handleCloseDialog();
