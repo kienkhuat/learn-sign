@@ -10,7 +10,7 @@ import {
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { assignmentDataType, classroomDataType } from "~/types/types";
+import type { assignmentDataType, classroomDataType } from "~/types/types";
 
 type PrivateProps = {
   assignment: assignmentDataType;

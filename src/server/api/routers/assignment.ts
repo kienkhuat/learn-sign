@@ -81,7 +81,7 @@ export const assignmentRouter = createTRPCRouter({
         });
       }
 
-      let imagesToDelete: string[] = [];
+      const imagesToDelete: string[] = [];
 
       foundAssignment.attachments.map((attachment) => {
         const attachmentAsObject = attachment as {

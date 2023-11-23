@@ -12,10 +12,15 @@ type PrivateProps = {
 };
 
 export function UploadDropzoneWithPreview(props: PrivateProps) {
-  const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
-    props._setFiles(acceptedFiles);
-  }, []);
+  const { files } = props;
+  const onDrop = useCallback(
+    (acceptedFiles: FileWithPath[]) => {
+      props._setFiles(acceptedFiles);
+    },
+    [files],
+  );
 
+  //@ts-ignore
   const fileTypes = props.permittedFileInfo?.config
     ? Object.keys(props.permittedFileInfo?.config)
     : [];
@@ -43,7 +48,7 @@ export function UploadDropzoneWithPreview(props: PrivateProps) {
           <XIcon className="h-[18px] w-[18px]" />
         </div>
         <div>
-          {file.type.slice(0, 5) === "image" ? <ImageIcon /> : <FileTextIcon />}
+          {file.type.startsWith("image") ? <ImageIcon /> : <FileTextIcon />}
         </div>
         <div>{file.name}</div>
       </div>

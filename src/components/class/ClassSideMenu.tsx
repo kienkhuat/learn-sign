@@ -2,12 +2,10 @@ import {
   BookOpenIcon,
   GraduationCapIcon,
   LayoutDashboardIcon,
-  MessageCircleIcon,
-  ShapesIcon,
   UsersIcon,
 } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -15,9 +13,7 @@ type PrivateProps = {
   // pathname: string;
 };
 
-export default function ClassSideMenu(props: PrivateProps) {
-  const [selectedMenu, setSelectedMenu] = useState("");
-
+export default function ClassSideMenu() {
   const searchParams = useSearchParams();
   const tabParams = searchParams.get("tab");
 

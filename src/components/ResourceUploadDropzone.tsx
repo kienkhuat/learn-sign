@@ -1,6 +1,6 @@
 import type { FileWithPath } from "@uploadthing/react";
 import { useDropzone } from "@uploadthing/react/hooks";
-import { FileTextIcon, ImageIcon, UploadCloud, XIcon } from "lucide-react";
+import { UploadCloud } from "lucide-react";
 import { useCallback } from "react";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 
@@ -32,9 +32,10 @@ type PrivateProps = {
 };
 
 export function ResourceUploadDropzone(props: PrivateProps) {
+  const { inputList } = props;
   const onDrop = useCallback(
     (acceptedFiles: FileWithPath[]) => {
-      const newInputList = props.inputList.map((updatedInput, updatedIndex) => {
+      const newInputList = props.inputList.map((updatedInput) => {
         if (updatedInput.id === props.inputId) {
           return { ...updatedInput, attachments: [...acceptedFiles] };
         }
@@ -42,9 +43,10 @@ export function ResourceUploadDropzone(props: PrivateProps) {
       });
       props._setInputList(newInputList);
     },
-    [props.inputList],
+    [inputList],
   );
 
+  //@ts-ignore
   const fileTypes = props.permittedFileInfo?.config
     ? Object.keys(props.permittedFileInfo?.config)
     : [];

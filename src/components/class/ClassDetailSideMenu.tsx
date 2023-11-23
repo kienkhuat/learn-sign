@@ -1,29 +1,22 @@
 import {
   ArrowLeftFromLineIcon,
-  BookOpenIcon,
   FileTextIcon,
-  GraduationCapIcon,
-  LayoutDashboardIcon,
   MessageCircleIcon,
   PenSquareIcon,
   SettingsIcon,
-  ShapesIcon,
   UsersIcon,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { classroomDataType } from "~/types/types";
+import React from "react";
+import type { classroomDataType } from "~/types/types";
 
 type PrivateProps = {
   classroomData: classroomDataType;
 };
 
 export default function ClassDetailSideMenu(props: PrivateProps) {
-  const [selectedMenu, setSelectedMenu] = useState("");
-
   const searchParams = useSearchParams();
   const tabParams = searchParams.get("tab");
 
