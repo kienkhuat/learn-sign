@@ -46,7 +46,6 @@ export function ResourceUploadDropzone(props: PrivateProps) {
     [inputList],
   );
 
-  //@ts-ignore
   const fileTypes = props.permittedFileInfo?.config
     ? Object.keys(props.permittedFileInfo?.config)
     : [];
