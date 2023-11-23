@@ -40,6 +40,8 @@ export default function ClassroomSettingScreen(props: PrivateProps) {
       classroomId: props.classroomData.id,
       newClassName: editedClassName,
     });
+    setEditedClassName(undefined);
+    setIsEditingClassName(false);
   };
 
   const handleDeleteClassroom = async () => {
