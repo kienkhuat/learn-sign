@@ -86,7 +86,7 @@ export default function StudentSubmissionView(props: PrivateProps) {
           studentId: props.sessionData.user.id,
           attachments: [...res],
           comment: commentInput,
-        });
+        }).catch((e) => console.log(e));
       } else {
         console.log("res is empty");
       }

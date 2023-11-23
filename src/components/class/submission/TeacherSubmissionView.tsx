@@ -252,7 +252,10 @@ export default function TeacherSubmissionView(props: PrivateProps) {
       const isGrading = submission.id === submissionGrading;
 
       return (
-        <div className="flex rounded-lg dark:bg-neutral-950">
+        <div
+          className="flex rounded-lg dark:bg-neutral-950"
+          key={submission.id}
+        >
           <div
             className={`min-w-[24px] rounded-l-lg ${
               submission.grade ? "bg-green-600" : "bg-neutral-500"

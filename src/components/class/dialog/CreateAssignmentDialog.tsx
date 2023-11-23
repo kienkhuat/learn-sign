@@ -75,16 +75,18 @@ export default function CreateAssignmentDialog(props: PrivateProps) {
     if (!sessionData) return false;
     if (!deadlineDate || !assignmentName) return false;
 
-    await startUpload(files).then((res) => {
-      createAssignment({
-        attachments: res?.length ? [...res] : [],
-        classroomId: props.classroomData.id,
-        deadline: deadlineDate,
-        name: assignmentName,
-        task: task,
-        teacherId: sessionData.user.id,
-      });
-    });
+    await startUpload(files)
+      .then((res) => {
+        createAssignment({
+          attachments: res?.length ? [...res] : [],
+          classroomId: props.classroomData.id,
+          deadline: deadlineDate,
+          name: assignmentName,
+          task: task,
+          teacherId: sessionData.user.id,
+        });
+      })
+      .catch((e) => console.log(e));
     closeDialog();
   };
 
