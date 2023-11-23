@@ -10,7 +10,7 @@
     "noEmit": true,
 
     //Custom (default false)
-    "noEmitOnError": true,
+    // "noEmitOnError": true,
 
     "esModuleInterop": true,
     "module": "esnext",
