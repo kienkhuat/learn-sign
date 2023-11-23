@@ -5,6 +5,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { utapi } from "~/server/uploadthing";
 
 export const dictionaryRouter = createTRPCRouter({
   getAllWord: publicProcedure.query(({ ctx }) => {
@@ -56,7 +57,13 @@ export const dictionaryRouter = createTRPCRouter({
         definition: z.string(),
       }),
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      // const uploadedVideo = await utapi.uploadFilesFromUrl(input.videoLink);
+      // const uploadedThumbnail = await utapi.uploadFilesFromUrl(
+      //   input.thumbnailLink,
+      // );
+      // console.log({ uploadedThumbnail, uploadedVideo });
+
       return ctx.db.word.create({ data: { ...input } });
     }),
 
