@@ -181,6 +181,7 @@ export default function Live_Translation() {
             {IsLoadModel ? (
               <>
                 <Webcam
+                  // @ts-ignore
                   ref={webcamRef}
                   className="absolute left-0 right-0 z-10 mx-auto text-center"
                 />
