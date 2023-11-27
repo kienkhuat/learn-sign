@@ -53,7 +53,7 @@ export default function Live_Translation() {
 
       canvasRef.current
         .getContext("2d")
-        .scale(window.devicePixelRatio, window.devicePixelRatio);
+        ?.scale(window.devicePixelRatio, window.devicePixelRatio);
     }
   };
 
@@ -83,7 +83,7 @@ export default function Live_Translation() {
     ctx: CanvasRenderingContext2D | null,
   ) => {
     if (!canvasRef.current) return;
-    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     detections.forEach((row: any) => {
       if (true) {
         //video
