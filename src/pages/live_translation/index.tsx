@@ -61,7 +61,7 @@ export default function Live_Translation() {
     if (
       typeof webcamRef.current !== "undefined" &&
       webcamRef.current !== null &&
-      webcamRef.current.video.readyState === 4
+      webcamRef.current.video!.readyState! === 4
     ) {
       const videoWidth = webcamRef.current.video.videoWidth;
       const videoHeight = webcamRef.current.video.videoHeight;
@@ -171,7 +171,7 @@ export default function Live_Translation() {
       <main className="h-full">
         <div className="h-full dark:bg-neutral-800">
           <Header />
-          <p className="my-10 text-center text-2xl font-medium">
+          <p className="my-10 text-center text-2xl font-medium dark:text-neutral-300">
             Tự động nhận diện ngôn ngữ qua Camera
           </p>
           <div>
@@ -187,7 +187,7 @@ export default function Live_Translation() {
                 />
               </>
             ) : (
-              <p className="text-center text-2xl font-medium">
+              <p className="text-center text-2xl font-medium dark:text-neutral-300">
                 Đang tải model...
               </p>
             )}
