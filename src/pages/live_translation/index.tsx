@@ -64,11 +64,13 @@ export default function Live_Translation() {
       // @ts-ignore
       webcamRef.current.video.readyState === 4
     ) {
+      // @ts-ignore
       const videoWidth = webcamRef.current.video.videoWidth;
+      // @ts-ignore
       const videoHeight = webcamRef.current.video.videoHeight;
 
       adjustCanvas(videoWidth, videoHeight);
-
+      // @ts-ignore
       const predictions = await model.detect(webcamRef.current.video);
       if (predictions.length !== 0) {
         console.log(predictions);
