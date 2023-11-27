@@ -22,7 +22,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!tabParams) {
-      router.push("/class?tab=dashboard");
+      router.push("/class?tab=classrooms");
     }
   }, [tabParams]);
 

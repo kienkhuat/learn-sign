@@ -1,13 +1,25 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Header } from "~/components/Header";
-
-import { api } from "~/utils/api";
 
 export default function Home() {
   // const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const [darkMode, setDarkmode] = useState(true);
+
+  const { data: sessionData } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.isReady) {
+      if (!sessionData) {
+        router.push("/dictionary");
+      } else {
+        router.push("/class");
+      }
+    }
+  }, [router, sessionData]);
 
   useEffect(() => {
     if (darkMode) {
