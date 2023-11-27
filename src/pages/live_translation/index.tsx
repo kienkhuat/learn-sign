@@ -85,7 +85,7 @@ export default function Live_Translation() {
     detections: any[],
     ctx: CanvasRenderingContext2D | null,
   ) => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || !ctx) return;
     ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     detections.forEach((row: any) => {
       if (true) {
