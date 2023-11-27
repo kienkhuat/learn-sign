@@ -1,8 +1,5 @@
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import DictionarySideMenu from "~/components/dictionary/DictionarySideMenu";
 import { Header } from "~/components/Header";
 import WordList from "~/components/dictionary/WordList";
 import WordToolbar from "~/components/dictionary/WordToolbar";
