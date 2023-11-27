@@ -32,6 +32,12 @@ export const Header = () => {
           <Link href="/class" className="cursor-pointer hover:text-gray-100">
             Lớp học
           </Link>
+          <Link
+            href="/live_translation"
+            className="cursor-pointer hover:text-gray-100"
+          >
+            Live translation
+          </Link>
         </div>
       </div>
       {sessionData ? (

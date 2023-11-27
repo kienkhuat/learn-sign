@@ -42,6 +42,10 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    // Roboflow
+    NEXT_PUBLIC_PUBLISHABLE_ROBOFLOW_API_KEY: z.string(),
+    NEXT_PUBLIC_PROJECT_URL: z.string(),
+    NEXT_PUBLIC_MODEL_VERSION: z.string(),
   },
 
   /**
@@ -57,6 +61,12 @@ export const env = createEnv({
     // DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+
+    // Roboflow
+    NEXT_PUBLIC_PUBLISHABLE_ROBOFLOW_API_KEY:
+      process.env.NEXT_PUBLIC_PUBLISHABLE_ROBOFLOW_API_KEY,
+    NEXT_PUBLIC_PROJECT_URL: process.env.NEXT_PUBLIC_PROJECT_URL,
+    NEXT_PUBLIC_MODEL_VERSION: process.env.NEXT_PUBLIC_MODEL_VERSION,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
