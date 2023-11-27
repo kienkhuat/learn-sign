@@ -41,6 +41,7 @@ const config = {
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/await-thenable": "off",
     "@typescript-eslint/require-await": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
   },
 };
 
