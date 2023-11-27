@@ -61,7 +61,8 @@ export default function Live_Translation() {
     if (
       typeof webcamRef.current !== "undefined" &&
       webcamRef.current !== null &&
-      webcamRef.current.video!.readyState! === 4
+      // @ts-ignore
+      webcamRef.current.video.readyState === 4
     ) {
       const videoWidth = webcamRef.current.video.videoWidth;
       const videoHeight = webcamRef.current.video.videoHeight;
