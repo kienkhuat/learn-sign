@@ -84,7 +84,7 @@ export default function StudentClassList() {
           </div>
         )}
       </div>
-      <div className="flex flex-col gap-4 dark:text-neutral-300">
+      {/* <div className="flex flex-col gap-4 dark:text-neutral-300">
         <div className="flex justify-between">
           <div className="text-3xl font-bold">Tất cả các lớp:</div>
           <Input
@@ -112,7 +112,7 @@ export default function StudentClassList() {
             <Loader2Icon className="animate-spin" />
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
