@@ -24,6 +24,9 @@ export const resourceRouter = createTRPCRouter({
             mode: "insensitive",
           },
         },
+        orderBy: {
+          name: "asc",
+        },
         include: {
           classroom: true,
         },
