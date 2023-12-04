@@ -128,7 +128,7 @@ export default function ClassroomResourceList(props: PrivateProps) {
 
   return (
     <>
-      <div className="w-full py-5 pr-6 pt-8">
+      <div className="w-full overflow-y-scroll py-5 pr-6 pt-8">
         <div className="mb-5 flex items-center justify-between">
           <div className="text-3xl font-bold text-neutral-300">
             Danh sách tài liệu chung
